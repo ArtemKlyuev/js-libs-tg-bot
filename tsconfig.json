@@ -1,0 +1,35 @@
+{
+  "exclude": ["node_modules"],
+  "include": ["src", "global.d.ts"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "target": "ES2022",
+    "module": "commonjs",
+    "lib": ["ES2021", "esnext.asynciterable"],
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "moduleResolution": "node",
+    "removeComments": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@config": ["./src/config.ts"],
+      "@services": ["./src/services/index.ts"],
+      "@repository": ["./src/repository/index.ts"],
+      "@controllers": ["./src/controllers/index.ts"]
+    }
+  }
+}
