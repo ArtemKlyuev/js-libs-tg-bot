@@ -11,7 +11,8 @@ export interface IdentifiedData<Data> {
   data: Data;
 }
 
-export type InsertResult<Data> = Either<InsertError, IdentifiedData<Data>>;
+// export type InsertResult<Data> = Either<InsertError, IdentifiedData<Data>>;
+export type InsertResult = Either<InsertError, void>;
 export type QueryResult<Error, Data> = Either<Error, IdentifiedData<Data>[]>;
 export type DatabaseInfo<Error, Data> = Either<Error, Data>;
 
@@ -19,7 +20,8 @@ export interface Database<InsertData, QueryData, DatabaseSignature> {
   // retrieve: <RetrieveError extends Error, SuccessData>() => Promise<
   //   Either<RetrieveError, SuccessData>
   // >;
-  insert: (data: InsertData) => Promise<InsertResult<InsertData>>;
+  // insert: (data: InsertData) => Promise<InsertResult<InsertData>>;
+  insert: (data: InsertData) => Promise<InsertResult>;
   findByQuery: (query: string) => Promise<QueryResult<FindError, QueryData>>;
   getDatabaseInfo: () => Promise<DatabaseInfo<Error, DatabaseSignature>>;
 }

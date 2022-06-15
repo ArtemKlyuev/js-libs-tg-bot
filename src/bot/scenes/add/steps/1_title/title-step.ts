@@ -1,4 +1,6 @@
-import { AddScene, notionDbRepository } from '../../../../bot';
+import { unwrapEither } from '@utils';
+
+import { AddScene } from '../../../../bot';
 
 import { Scene } from '../../../Scene';
 
@@ -9,22 +11,22 @@ titleStep.on('text', async (ctx) => {
 
   ctx.scene.session.state.addScene ??= { state: {}, properties: {} } as AddScene;
 
-  const properties = await notionDbRepository.getProperties();
+  const eitherDbProperties = await ctx.diContainer.dbRepository.getProperties();
 
-  let result: Function;
+  const eitherDbPropertiesValue = eitherDbProperties
+    .mapRight((properties) => ({ properties, errorMessage: '' }))
+    .mapLeft(({ message }) => ({
+      properties: null,
+      errorMessage: `Произошла ошибка при попытке получения инфы о свойствах.\nОшибка: ${message}`,
+    }));
 
-  properties
-    .mapRight((properties) => {
-      ctx.scene.session.state.addScene!.properties = properties;
-      result = ctx.wizard.next.bind(ctx.wizard);
-    })
-    .mapLeft(async (error) => {
-      await ctx.reply(
-        `Произошла ошибка при попытке получения инфы о свойствах.\nОшибка: ${error.message}`,
-      );
+  const { errorMessage, properties } = unwrapEither(eitherDbPropertiesValue);
 
-      result = ctx.scene.leave.bind(ctx.scene);
-    });
+  if (errorMessage) {
+    await ctx.reply(errorMessage);
+    return ctx.scene.leave();
+  }
 
-  return result!();
+  ctx.scene.session.state.addScene!.properties = properties!;
+  return ctx.wizard.next();
 });

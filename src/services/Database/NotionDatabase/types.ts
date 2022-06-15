@@ -33,16 +33,20 @@ type InsertURL = Extract<NotionDatabasePagePropertiesValues2, { url: any }>;
 type NotionDatabasePagePropertiesValues = ValueOf<NotionDatabasePageProperties, 'properties'>;
 
 export interface InsertData {
-  Name: string;
-  Platform: string;
-  'Repo link': string;
-  'NPM weekly downloads': number;
-  Tags: string[];
-  Summary: string;
-  Status: string;
-  'Score /5'?: string;
-  Review?: string;
+  name: string;
+  platform: string;
+  repoURL: string;
+  npmDownloads: number;
+  stars: number;
+  tags: string[];
+  summary: string;
+  status: string;
+  score?: string;
+  review?: string;
 }
+
+// type A = Extract<CreatePageResponse, { parent: {} }>;
+// export type InsertData = A['properties'];
 
 /**
  * =========================================

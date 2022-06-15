@@ -1,12 +1,12 @@
 import { Telegraf, Context, Scenes, session } from 'telegraf';
 
 import { Config } from '@config';
-import { NotionDatabase } from '@services';
+import { GithubApi, NPMRegistry } from '@services';
+import { DatabaseRepository, Properties } from '@repository';
 
-import { userPermissionGuard } from './middlewares';
+import { userPermissionGuard, diContainer } from './middlewares';
 import { commands } from './commands';
 import { addScene, searchScene } from './scenes';
-import { NotionDbRepository, Properties } from '../repository';
 
 export interface AddScene {
   properties: Properties;
@@ -16,7 +16,7 @@ export interface AddScene {
 export interface AddSceneState {
   name: string;
   platform: string;
-  tags?: string[];
+  tags: string[];
   status: string;
   score?: string;
   review?: string;
@@ -24,6 +24,12 @@ export interface AddSceneState {
 
 interface State {
   addScene?: AddScene;
+}
+
+interface DiContainer {
+  dbRepository: DatabaseRepository;
+  GithubApi: typeof GithubApi;
+  NPMRegistry: typeof NPMRegistry;
 }
 
 /**
@@ -45,39 +51,38 @@ export interface WizardSession extends Scenes.WizardSessionData {
  * We also have to set the wizard object under the `wizard` property.
  */
 export interface MyContext extends Context {
+  diContainer: DiContainer;
   scene: Scenes.SceneContextScene<MyContext, WizardSession>;
-  // scene: Scenes.SceneContextScene<MyContext, Scenes.WizardSessionData>;
   wizard: Scenes.WizardContextWizard<MyContext>;
 }
 
-const notionDb = new NotionDatabase({
-  authToken: Config.env.NOTION_TOKEN,
-  databaseID: Config.env.NOTION_DATABASE_ID,
-});
-
-export const notionDbRepository = new NotionDbRepository(notionDb);
-
-const main = async (): Promise<void> => {
+export const startBot = async (): Promise<void> => {
   const bot = new Telegraf<MyContext>(Config.env.TELEGRAM_BOT_TOKEN);
 
   bot.use(userPermissionGuard(Config.env.VALID_USER_ID));
+  bot.use(session());
+  bot.use(diContainer);
 
   const scenes = new Scenes.Stage<MyContext>([addScene.scene, searchScene.scene]);
 
-  bot.use(session());
   bot.use(scenes.middleware());
 
   await bot.telegram.setMyCommands(commands);
 
   bot.start((ctx) => ctx.reply('Welcome!'));
 
+  bot.command('healthcheck', (ctx) => ctx.reply('Ok'));
   bot.command('add', (ctx) => ctx.scene.enter(addScene.name));
   bot.command('search', (ctx) => ctx.scene.enter(searchScene.name));
 
   bot.launch();
 
-  process.once('SIGINT', () => bot.stop('SIGINT'));
-  process.once('SIGTERM', () => bot.stop('SIGTERM'));
+  process.once('SIGINT', () => {
+    console.log('bot SIGINT');
+    bot.stop('SIGINT');
+  });
+  process.once('SIGTERM', () => {
+    console.log('bot SIGTERM');
+    bot.stop('SIGTERM');
+  });
 };
-
-main();

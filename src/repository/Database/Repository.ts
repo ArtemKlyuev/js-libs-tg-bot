@@ -24,15 +24,19 @@ export interface Properties {
 export interface Library {
   name: string;
   platform: string;
+  repoURL: string;
+  npmDownloads: number;
+  githubStars: number;
+  summary: string;
   tags: string[];
   status: string;
-  rating?: string;
+  score?: string;
   review?: string;
 }
 
 export type SearchResult = Either<FindError, LibraryData[]>;
 export type PropertiesResult = Either<Error, Properties>;
-export type AddResult = Either<Error, unknown>;
+export type AddResult = Either<Error, void>;
 
 export interface DatabaseRepository {
   /**

@@ -9,7 +9,6 @@ export interface Property<Name extends string, Type extends string> {
   readonly name: Name;
   readonly type: Type;
   readonly id: string | undefined;
-  content: string | string[] | number;
 }
 
 // ----------------------------------------------------

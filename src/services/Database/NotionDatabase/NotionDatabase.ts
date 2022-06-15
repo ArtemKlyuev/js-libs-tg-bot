@@ -12,6 +12,7 @@ import {
   NotionDatabaseSignature,
 } from './types';
 import { FindByQueryError } from './errors';
+import { MultiSelect, Number, RichText, Select, Title, URL } from './properties2';
 
 export interface NotionDb
   extends Database<InsertData, SearchResultProperties, NotionDatabaseSignature> {}
@@ -34,14 +35,50 @@ export class NotionDatabase implements NotionDb {
     }
   }
 
-  async insert(data: InsertData): Promise<InsertResult<InsertData>> {
+  async insert(data: InsertData): Promise<InsertResult> {
     try {
-      const response = await this.#notion.pages.create({
+      const {
+        name,
+        platform,
+        repoURL,
+        tags,
+        summary,
+        status,
+        score,
+        npmDownloads: downloads,
+        stars,
+        review,
+      } = data;
+
+      const Score = score
+        ? new Select({
+            name: 'Score /5',
+            selectedOption: { name: score },
+          }).toColumn()
+        : {};
+
+      const Review = review ? new RichText({ name: 'Review', text: review }).toColumn() : {};
+
+      await this.#notion.pages.create({
         parent: { database_id: this.#databaseID },
-        properties: data,
+        properties: {
+          ...new Title({ name: 'Name', title: name }).toColumn(),
+          ...new Select({ name: 'Platform', selectedOption: { name: platform } }).toColumn(),
+          ...new URL({ name: 'Repo link', url: repoURL }).toColumn(),
+          ...new Number({ name: 'NPM weekly downloads', number: downloads }).toColumn(),
+          ...new Number({ name: 'github stars', number: stars }).toColumn(),
+          ...new MultiSelect({
+            name: 'Tags',
+            selectedOptions: tags.map((tag) => ({ name: tag })),
+          }).toColumn(),
+          ...new RichText({ name: 'Summary', text: summary }).toColumn(),
+          ...new Select({ name: 'Status', selectedOption: { name: status } }).toColumn(),
+          ...Score,
+          ...Review,
+        },
       });
 
-      return right({ id: response.id, data });
+      return right(undefined);
     } catch (error) {
       return left(error);
     }
@@ -68,45 +105,3 @@ export class NotionDatabase implements NotionDb {
     }
   }
 }
-
-// export class NotionDatabase implements Database {
-//   readonly #notion: Client;
-//   readonly #databaseID: string;
-
-//   constructor(authToken: string, databaseID: string) {
-//     this.#notion = new Client({ auth: authToken });
-//     this.#databaseID = databaseID;
-//   }
-
-//   async insert<Data extends Value>(data: Data): Promise<Either<InsertError, InsertedData<Data>>> {
-//     try {
-//       const response = await this.#notion.pages.create({
-//         parent: { database_id: this.#databaseID },
-//         properties: data,
-//       });
-
-//       return right({ id: response.id, data });
-//     } catch (error) {
-//       return left(error);
-//     }
-//   }
-
-//   async findByQuery<Data extends abcdef>(
-//     query: string,
-//   ): Promise<Either<FindError, FindedData<Data>[]>> {
-//     try {
-//       const response = await this.#notion.search({ query });
-
-//       if (!response.results.length) {
-//         throw new Error(`No results found by query "${query}"`);
-//       }
-
-//       const result = (response.results as abcd[]).map(({ id, properties: data }) => ({ id, data }));
-
-//       // @ts-expect-error ебучий тс
-//       return right(result);
-//     } catch (error) {
-//       return left(error);
-//     }
-//   }
-// }

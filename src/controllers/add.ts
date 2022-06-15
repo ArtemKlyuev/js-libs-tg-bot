@@ -1,12 +1,12 @@
-import { left, mergeInMany } from '@sweet-monads/either';
+import { Either, left, mergeInMany } from '@sweet-monads/either';
 
 import { DatabaseRepository } from '@repository';
 import { GithubApi, NPMRegistry } from '@services';
 
 interface Dependencies {
-  // dbRepository: DatabaseRepository;
   github: typeof GithubApi;
   NPMRegistry: typeof NPMRegistry;
+  dbRepo: DatabaseRepository;
 }
 
 interface Library {
@@ -14,50 +14,47 @@ interface Library {
   platform: string;
   tags: string[];
   status: string;
-  rating?: string;
+  score?: string;
   review?: string;
 }
 
 export const addController = async (
-  // { dbRepository, NPMRegistry, github }: Dependencies,
-  { NPMRegistry, github }: Dependencies,
+  { NPMRegistry, github, dbRepo }: Dependencies,
   library: Library,
-): Promise<void> => {
+): Promise<Either<Error | unknown[], void>> => {
   const npm = await NPMRegistry.getPackageInfo(library.name);
   const downloads = (
     await NPMRegistry.getPackageDownloads(library.name, { point: 'last-week' })
   ).mapRight(({ downloads }) => downloads);
 
-  const a = (
-    await npm
-      .mapRight((lib) => {
-        const { owner, name } = lib.gitRepository;
-        console.log(owner, name);
+  const eitherNPMInfo = (
+    await npm.asyncMap(async (lib) => {
+      const { owner, name } = lib.gitRepository;
 
-        return { owner, name };
-      })
-      .asyncMap(async ({ owner, name }) => {
-        if (!owner || !name) {
-          return left(new Error('No owner or name'));
-        }
+      if (!owner || !name) {
+        return left(new Error('No owner or name'));
+      }
 
-        const res = await github.getRepoInfo(owner, name);
+      const res = await github.getRepoInfo(owner, name);
 
-        return res.mapRight(({ html_url, stargazers_count }) => {
-          return { ...library, repoURL: html_url, stars: stargazers_count };
-        });
-      })
+      return res.mapRight(({ html_url, stargazers_count, description }) => {
+        return { ...library, repoURL: html_url, stars: stargazers_count, description };
+      });
+    })
   ).join();
 
-  // a.mapLeft((error) => {
-  //     console.log('npm ошибка', error);
-  //   });
+  const fullLibraryInfo = mergeInMany([eitherNPMInfo, downloads]);
 
-  const c = mergeInMany([a, downloads]);
+  const result = (
+    await fullLibraryInfo.asyncMap(([lib, npmDownloads]) => {
+      return dbRepo.addLibrary({
+        ...lib,
+        npmDownloads,
+        githubStars: lib.stars,
+        summary: lib.description ?? '',
+      });
+    })
+  ).join();
 
-  c.mapRight((res) => {}).mapLeft((err) => {});
-
-  // const eitherLibrary = await dbRepository.searchLibrary(searchQuery);
-
-  // return eitherLibrary;
+  return result;
 };

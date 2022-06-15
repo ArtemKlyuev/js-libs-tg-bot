@@ -3,8 +3,6 @@ import { Scene } from '../../Scene';
 import { searchController } from '@controllers';
 import { LibraryData } from '@repository';
 
-import { notionDbRepository } from '../../../bot';
-
 class LibraryView {
   readonly #libraryData: Record<string, string | number | null>;
 
@@ -42,7 +40,7 @@ class LibraryView {
 export const secondStep = Scene.createStep();
 
 secondStep.on('text', async (ctx) => {
-  const eitherSearchResult = await searchController(notionDbRepository, ctx.message.text);
+  const eitherSearchResult = await searchController(ctx.diContainer.dbRepository, ctx.message.text);
 
   await ctx.reply('Ищу...');
 

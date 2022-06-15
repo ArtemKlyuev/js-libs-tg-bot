@@ -1,6 +1,12 @@
 import { MultiSelect2, NotionDb, Select2 } from '@services';
 
-import { DatabaseRepository, SearchResult, PropertiesResult, Library } from '../Repository';
+import {
+  DatabaseRepository,
+  SearchResult,
+  PropertiesResult,
+  Library,
+  AddResult,
+} from '../Repository';
 
 export class NotionDbRepository implements DatabaseRepository {
   readonly #db: NotionDb;
@@ -30,8 +36,13 @@ export class NotionDbRepository implements DatabaseRepository {
     });
   }
 
-  async addLibrary(library: Library) {
-    this.#db.insert({});
+  async addLibrary(library: Library): Promise<AddResult> {
+    const response = await this.#db.insert({
+      ...library,
+      stars: library.githubStars,
+    });
+
+    return response;
   }
 
   async searchLibrary(query: string): Promise<SearchResult> {
