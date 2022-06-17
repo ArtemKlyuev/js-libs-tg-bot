@@ -23,8 +23,8 @@ jobs:
             TELEGRAM_BOT_TOKEN
             TELEGRAM_VALID_USER_ID
         env:
-          NODE_ENV: 'production'
-          NOTION_TOKEN: ${{secrets.NOTION_TOKEN}}
-          NOTION_DATABASE_ID: ${{secrets.NOTION_DATABASE_ID}}
-          TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
-          TELEGRAM_VALID_USER_ID: ${{secrets.TELEGRAM_VALID_USER_ID}}
+          HD_NODE_ENV: 'production'
+          HD_NOTION_TOKEN: ${{secrets.NOTION_TOKEN}}
+          HD_NOTION_DATABASE_ID: ${{secrets.NOTION_DATABASE_ID}}
+          HD_TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
+          HD_TELEGRAM_VALID_USER_ID: ${{secrets.TELEGRAM_VALID_USER_ID}}
