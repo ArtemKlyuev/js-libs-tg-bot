@@ -4,10 +4,10 @@ import {
   titleStep,
   platformStep,
   tagsStep,
-  fourthStep,
-  fifthStep,
-  sixthStep,
-  seventhStep,
+  statusStep,
+  ratingStep,
+  reviewStep,
+  resultStep,
 } from './steps';
 
 export const addScene = new Scene(
@@ -15,8 +15,8 @@ export const addScene = new Scene(
   titleStep,
   platformStep,
   tagsStep,
-  fourthStep,
-  fifthStep,
-  sixthStep,
-  seventhStep,
+  statusStep,
+  ratingStep,
+  reviewStep,
+  resultStep,
 );

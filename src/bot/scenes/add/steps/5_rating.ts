@@ -2,13 +2,13 @@ import { Markup } from 'telegraf';
 
 import { Scene } from '../../Scene';
 
-export const fifthStep = Scene.createStep();
+export const ratingStep = Scene.createStep();
 
 const getRatingButtons = (rating: string[]) => {
   return rating.map((status) => [Markup.button.callback(status, status)]);
 };
 
-fifthStep.on('callback_query', async (ctx) => {
+ratingStep.on('callback_query', async (ctx) => {
   await ctx.answerCbQuery();
 
   ctx.scene.session.state.addScene!.state.status = ctx.update.callback_query.data!;

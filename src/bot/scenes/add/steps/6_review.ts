@@ -2,9 +2,9 @@ import { Markup } from 'telegraf';
 
 import { Scene } from '../../Scene';
 
-export const sixthStep = Scene.createStep();
+export const reviewStep = Scene.createStep();
 
-sixthStep.on('callback_query', async (ctx) => {
+reviewStep.on('callback_query', async (ctx) => {
   await ctx.answerCbQuery();
 
   if (ctx.update.callback_query.data && ctx.update.callback_query.data !== 'next') {

@@ -3,7 +3,7 @@ import { unwrapEither } from '@utils';
 
 import { Scene } from '../../Scene';
 
-export const seventhStep = Scene.createStep();
+export const resultStep = Scene.createStep();
 
 const handler = async (ctx: any): Promise<void> => {
   const { state } = ctx.scene.session.state.addScene!;
@@ -37,12 +37,12 @@ const handler = async (ctx: any): Promise<void> => {
   return ctx.scene.leave();
 };
 
-seventhStep.on('text', (ctx) => {
+resultStep.on('text', (ctx) => {
   ctx.scene.session.state.addScene!.state.review = ctx.message.text;
   return handler(ctx);
 });
 
-seventhStep.on('callback_query', async (ctx) => {
+resultStep.on('callback_query', async (ctx) => {
   await ctx.answerCbQuery();
 
   return handler(ctx);
