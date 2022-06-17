@@ -22,4 +22,6 @@ WORKDIR /app
 COPY --from=builder /app-build/package.json ./
 COPY --from=builder /app-build/build ./build
 
+RUN ls -a
+
 CMD ["yarn", "start"]
