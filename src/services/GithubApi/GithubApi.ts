@@ -6,7 +6,7 @@ type RepoInfo = Awaited<ReturnType<Octokit['repos']['get']>>['data'];
 export class GithubApi {
   static readonly #octokit: Octokit = new Octokit();
 
-  static async getRepoInfo(owner: string, name: string): Promise<Either<unknown, RepoInfo>> {
+  static async getRepoInfo(owner: string, name: string): Promise<Either<Error, RepoInfo>> {
     try {
       const response = await this.#octokit.repos.get({ owner, repo: name });
 
