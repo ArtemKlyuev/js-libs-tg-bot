@@ -19,6 +19,7 @@ FROM node:16.15.1-alpine3.16 as runner
 
 WORKDIR /app
 
+COPY --from=builder /app-build/package.json ./
 COPY --from=builder /app-build/build ./build
 
 CMD ["yarn", "start"]
