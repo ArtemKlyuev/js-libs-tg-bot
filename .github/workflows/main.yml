@@ -1,0 +1,28 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          usedocker: true
+          docker_build_args: |
+            NOTION_TOKEN
+            NOTION_DATABASE_ID
+            TELEGRAM_BOT_TOKEN
+            TELEGRAM_VALID_USER_ID
+        env:
+          NOTION_TOKEN: ${{secrets.NOTION_TOKEN}}
+          NOTION_DATABASE_ID: ${{secrets.NOTION_DATABASE_ID}}
+          TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
+          TELEGRAM_VALID_USER_ID: ${{secrets.TELEGRAM_VALID_USER_ID}}
