@@ -17,11 +17,13 @@ jobs:
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           usedocker: true
           docker_build_args: |
+            NODE_ENV
             NOTION_TOKEN
             NOTION_DATABASE_ID
             TELEGRAM_BOT_TOKEN
             TELEGRAM_VALID_USER_ID
         env:
+          NODE_ENV: 'production'
           NOTION_TOKEN: ${{secrets.NOTION_TOKEN}}
           NOTION_DATABASE_ID: ${{secrets.NOTION_DATABASE_ID}}
           TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
