@@ -59,7 +59,7 @@ export interface MyContext extends Context {
 export const startBot = async (): Promise<void> => {
   const bot = new Telegraf<MyContext>(Config.env.TELEGRAM_BOT_TOKEN);
 
-  bot.use(userPermissionGuard(Config.env.VALID_USER_ID));
+  bot.use(userPermissionGuard(Config.env.TELEGRAM_VALID_USER_ID));
   bot.use(session());
   bot.use(diContainer);
 

@@ -3,11 +3,11 @@ const envs: EnvVaribales[] = [
   'NOTION_DATABASE_ID',
   'NOTION_TOKEN',
   'TELEGRAM_BOT_TOKEN',
-  'VALID_USER_ID',
+  'TELEGRAM_VALID_USER_ID',
 ];
 
-interface ParsedEnvVariables extends Omit<Env, 'VALID_USER_ID'> {
-  VALID_USER_ID: number;
+interface ParsedEnvVariables extends Omit<Env, 'TELEGRAM_VALID_USER_ID'> {
+  TELEGRAM_VALID_USER_ID: number;
 }
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -29,7 +29,7 @@ export class Config {
   }
 
   static #processEnvVariableValue(name: EnvVaribales, value: string): string | number {
-    if (name === 'VALID_USER_ID') {
+    if (name === 'TELEGRAM_VALID_USER_ID') {
       return Number(value);
     }
 
