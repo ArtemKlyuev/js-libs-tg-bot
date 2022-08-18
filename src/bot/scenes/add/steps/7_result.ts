@@ -20,8 +20,6 @@ const handler = async (ctx: any): Promise<void> => {
       const errorPattern = `Ошибка при добавлении библиотеки <code>${state.name}</code>`;
 
       if (Array.isArray(error)) {
-        console.log('array errors', error);
-
         const errorsMesssage = (error as Error[]).map(({ message }) => message).join('\n');
 
         return `${errorPattern}\n${errorsMesssage}`;
