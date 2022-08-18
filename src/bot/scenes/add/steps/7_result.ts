@@ -14,10 +14,10 @@ const handler = async (ctx: any): Promise<void> => {
     state,
   );
 
-  const eitheraddMessage = eitherAdd
+  const eitherAddMessage = eitherAdd
     .mapRight(() => `Библиотека <code>${state.name}</code> успешно добавлена!`)
     .mapLeft((error) => {
-      const errorPattern = `Ошибка при добавлении библиотеки ${state.name}`;
+      const errorPattern = `Ошибка при добавлении библиотеки <code>${state.name}</code>`;
 
       if (Array.isArray(error)) {
         console.log('array errors', error);
@@ -30,7 +30,7 @@ const handler = async (ctx: any): Promise<void> => {
       return `${errorPattern}\n${error.message}`;
     });
 
-  const message = unwrapEither(eitheraddMessage);
+  const message = unwrapEither(eitherAddMessage);
 
   ctx.replyWithHTML(message);
 
