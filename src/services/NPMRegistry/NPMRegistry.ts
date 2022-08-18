@@ -10,12 +10,12 @@ import {
   GitRepository,
 } from 'query-registry';
 
-interface Kek extends GitRepository {
+interface SpecificGitRepository extends GitRepository {
   owner: string | null;
   name: string | null;
 }
 
-export type PackageInfo = Packument & { gitRepository: Kek };
+export type PackageInfo = Packument & { gitRepository: SpecificGitRepository };
 export type PackageNameError = typeof InvalidPackageNameError;
 export type PackageDownloadsError = FetchError;
 
