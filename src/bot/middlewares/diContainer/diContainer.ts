@@ -12,8 +12,6 @@ export const diContainer = (
     return next();
   }
 
-  // ctx.sess
-
   const notionDb = new NotionDatabase({
     authToken: Config.env.NOTION_TOKEN,
     databaseID: Config.env.NOTION_DATABASE_ID,

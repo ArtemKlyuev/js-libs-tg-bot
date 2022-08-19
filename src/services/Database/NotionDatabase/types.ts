@@ -45,9 +45,6 @@ export interface InsertData {
   review?: string;
 }
 
-// type A = Extract<CreatePageResponse, { parent: {} }>;
-// export type InsertData = A['properties'];
-
 /**
  * =========================================
  */
