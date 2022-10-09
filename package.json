@@ -2,6 +2,10 @@
   "name": "js-libs-tg-bot",
   "version": "1.0.0",
   "license": "MIT",
+  "private": "true",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "typecheck": "tsc --noEmit --pretty",
     "dev": "nodemon src/bot/index.ts",
