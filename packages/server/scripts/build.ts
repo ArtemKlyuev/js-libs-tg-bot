@@ -1,6 +1,6 @@
 import { build } from 'esbuild';
 
-import { devDependencies } from './package.json';
+import { devDependencies } from '../package.json';
 
 build({
   entryPoints: ['./src/bot/index.ts'],
