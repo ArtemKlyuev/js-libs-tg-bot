@@ -34,5 +34,8 @@
     "@sweet-monads/either": "3.1.0",
     "lodash": "4.17.21",
     "query-registry": "2.5.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "4.14.186"
   }
 }
