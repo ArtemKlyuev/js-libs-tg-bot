@@ -9,6 +9,7 @@
   "scripts": {
     "add:root": "yarn add -W -D -E",
     "package:client": "yarn workspace client",
+    "package:common": "yarn workspace common",
     "package:server": "yarn workspace server"
   },
   "devDependencies": {
