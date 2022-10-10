@@ -5,7 +5,18 @@
   "private": "true",
   "type": "module",
   "exports": {
-    "services": "./src/services/index.ts"
+    "./package.json": "./package.json",
+    "./services": {
+      "import": "./src/services/index.ts",
+      "types": "./src/services/index.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "services": [
+        "src/services/index.ts"
+      ]
+    }
   },
   "scripts": {
     "typecheck": "tsc --noEmit --pretty"
