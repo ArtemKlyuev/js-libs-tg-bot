@@ -1,12 +1,22 @@
 import { Checkbox, Fieldset, Input, InputLabel, Radio } from './components';
+import { useDebouncedSearch } from './hooks';
 
 export const App = () => {
+  const { value, setValue } = useDebouncedSearch({
+    onSearch: (value) => console.log('value changed:', value),
+    wait: 1000,
+  });
+
+  const handleLibraryNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setValue(event.target.value);
+  };
+
   return (
     <main className="artboard phone-2 m-auto grid gap-[20px]">
       <h1 className="text-3xl font-bold underline">Добавление библиотеки</h1>
       <div className="form-control w-full max-w-xs">
         <InputLabel label="Название библиотеки" />
-        <Input />
+        <Input value={value} onChange={handleLibraryNameChange} />
       </div>
       <Fieldset label="Выберите платформу">
         <Radio name="platform" value="frontend" label="Frontend" />
