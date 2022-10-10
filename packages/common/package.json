@@ -4,9 +4,17 @@
   "license": "MIT",
   "private": "true",
   "type": "module",
+  "exports": {
+    "services": "./src/services/index.ts"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit --pretty"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@notionhq/client": "1.0.4",
+    "@octokit/rest": "18.12.0",
+    "@sweet-monads/either": "3.1.0",
+    "lodash": "4.17.21",
+    "query-registry": "2.5.0"
+  }
 }
