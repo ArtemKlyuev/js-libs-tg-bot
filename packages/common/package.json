@@ -9,12 +9,19 @@
     "./services": {
       "import": "./src/services/index.ts",
       "types": "./src/services/index.ts"
+    },
+    "./utils": {
+      "import": "./src/utils/index.ts",
+      "types": "./src/utils/index.ts"
     }
   },
   "typesVersions": {
     "*": {
       "services": [
         "src/services/index.ts"
+      ],
+      "utils": [
+        "src/utils/index.ts"
       ]
     }
   },
