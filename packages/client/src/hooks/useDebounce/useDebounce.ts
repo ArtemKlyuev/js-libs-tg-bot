@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { Settings, DebouncedFunction, debounce } from 'common/utils';
 
-interface Options<Callback extends (...args: any) => any> {
+export interface Options<Callback extends (...args: any) => any> {
   callback: Callback;
   wait?: number;
   settings?: Settings;
