@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Settings, DebouncedFunction, debounce } from 'common/utils';
 
 export interface Options<Callback extends (...args: any) => any> {
@@ -12,7 +12,7 @@ export const useDebounce = <Callback extends (...args: any) => any>({
   wait,
   settings,
 }: Options<Callback>): DebouncedFunction<Callback> => {
-  const debouncedCallback = useRef(debounce(callback, wait, settings)).current;
+  const debouncedCallback = useCallback(debounce(callback, wait, settings), []);
 
   useEffect(() => {
     return () => {
