@@ -1,5 +1,3 @@
-import { NPMRegistry } from 'common/services';
-
 import { Checkbox, Fieldset, Input, InputLabel, Radio } from './components';
 
 export const App = () => {
