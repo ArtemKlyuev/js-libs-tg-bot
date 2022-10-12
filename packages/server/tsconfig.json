@@ -5,7 +5,7 @@
     "baseUrl": ".",
     "outDir": "./build",
     "target": "ES2022",
-    "module": "commonjs",
+    "module": "ESNext",
     "lib": ["ES2021", "esnext.asynciterable"],
     "skipLibCheck": true,
     "sourceMap": false,
