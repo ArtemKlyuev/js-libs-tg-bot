@@ -1,9 +1,14 @@
 import { Checkbox, Fieldset, Input, InputLabel, Radio } from './components';
-import { useDebouncedSearch } from './hooks';
+import { useDebouncedSearch, useLibraryStatus } from './hooks';
 
 export const App = () => {
+  const { setLibrary } = useLibraryStatus();
+
   const { value, setValue } = useDebouncedSearch({
-    onSearch: (value) => console.log('value changed:', value),
+    onSearch: (value) => {
+      console.log('value changed:', value);
+      setLibrary(value);
+    },
     wait: 1000,
   });
 
