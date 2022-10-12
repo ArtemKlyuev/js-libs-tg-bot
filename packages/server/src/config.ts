@@ -1,6 +1,6 @@
 const envs: EnvVaribales[] = ['NODE_ENV', 'NOTION_DATABASE_ID', 'NOTION_TOKEN'];
 
-interface ParsedEnvVariables extends Omit<Env, 'TELEGRAM_VALID_USER_ID'> {
+export interface ParsedEnvVariables extends Omit<Env, 'TELEGRAM_VALID_USER_ID'> {
   TELEGRAM_VALID_USER_ID: number;
 }
 
