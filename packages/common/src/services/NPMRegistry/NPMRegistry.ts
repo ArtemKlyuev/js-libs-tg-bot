@@ -19,6 +19,8 @@ export type PackageInfo = Packument & { gitRepository: SpecificGitRepository };
 export type PackageNameError = typeof InvalidPackageNameError;
 export type PackageDownloadsError = FetchError;
 
+export type { FetchError };
+
 interface Options {
   point: DownloadPeriod;
 }

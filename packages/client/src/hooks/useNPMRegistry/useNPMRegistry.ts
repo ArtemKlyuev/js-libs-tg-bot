@@ -1,13 +1,7 @@
-import { NPMRegistry } from 'common/services';
+import { PackageInfo, PackageNameError, FetchError, NPMRegistry } from 'common/services';
 
-interface Kek {
-  getPackageInfo: typeof NPMRegistry.getPackageInfo;
-  getPackageDownloads: typeof NPMRegistry.getPackageDownloads;
-}
+export type { PackageInfo, PackageNameError, FetchError };
 
-export const useNPMRegistry = (): Kek => {
-  const getPackageInfo = NPMRegistry.getPackageInfo;
-  const getPackageDownloads = NPMRegistry.getPackageDownloads;
-
-  return { getPackageInfo, getPackageDownloads };
+export const useNPMRegistry = (): typeof NPMRegistry => {
+  return NPMRegistry;
 };
