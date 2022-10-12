@@ -1,0 +1,26 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": "true",
+  "scripts": {
+    "typecheck": "tsc --noEmit --pretty",
+    "dev": "nodemon src/bot/index.ts",
+    "dev:debug": "cross-env DEBUG='telegraf:*' yarn dev",
+    "start": "node build/index.js",
+    "build": "ts-node scripts/build.ts --swc"
+  },
+  "dependencies": {
+    "telegraf": "4.8.3"
+  },
+  "devDependencies": {
+    "@swc/core": "1.2.203",
+    "@types/node": "16.11.41",
+    "cross-env": "7.0.3",
+    "dotenv": "16.0.1",
+    "esbuild": "0.14.43",
+    "nodemon": "2.0.16",
+    "ts-node": "10.8.1",
+    "tsconfig-paths": "4.0.0"
+  }
+}
