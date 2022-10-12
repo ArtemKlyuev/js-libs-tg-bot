@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "license": "MIT",
   "private": "true",
+  "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit --pretty",
-    "dev": "nodemon src/bot/index.ts",
+    "dev": "nodemon src/index.ts",
     "dev:debug": "cross-env DEBUG='telegraf:*' yarn dev",
     "start": "node build/index.js",
     "build": "ts-node scripts/build.ts --swc"
   },
   "dependencies": {
+    "fastify": "4.8.1",
     "telegraf": "4.8.3"
   },
   "devDependencies": {
