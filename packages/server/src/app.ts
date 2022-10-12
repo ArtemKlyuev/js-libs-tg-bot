@@ -1,9 +1,12 @@
 import fastify from 'fastify';
+import { fastifyAwilixPlugin } from '@fastify/awilix';
 
 const app = fastify({ logger: true });
 
-app.get('/', async (request, reply) => {
-  return { hello: 'world' };
+app.register(fastifyAwilixPlugin, { disposeOnClose: true, disposeOnResponse: true });
+
+app.get('/healthcheck', async (request, reply) => {
+  return 'ok';
 });
 
 app.get(
@@ -13,6 +16,7 @@ app.get(
     if (!request.query.name) {
       return reply.code(400).send({ error: `you should specify "name" param` });
     }
+
     // return `requested library: ${String(request.query)}`;
     return `requested library: kek`;
   },
