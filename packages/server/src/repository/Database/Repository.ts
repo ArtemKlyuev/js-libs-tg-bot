@@ -35,6 +35,7 @@ export interface Library {
 }
 
 export type SearchResult = Either<FindError, LibraryData[]>;
+export type SearchLibraryResult = Either<FindError, LibraryData>;
 export type PropertiesResult = Either<Error, Properties>;
 export type AddResult = Either<Error, void>;
 
@@ -42,7 +43,8 @@ export interface DatabaseRepository {
   /**
    * Поиск библиотеки по критерию(название/тег и т.д.)
    */
-  searchLibrary: (query: string) => Promise<SearchResult>;
+  searchLibraries: (query: string) => Promise<SearchResult>;
+  searchLibraryByName: (name: string) => Promise<SearchLibraryResult>;
   addLibrary: (library: Library) => Promise<AddResult>;
   getProperties: () => Promise<PropertiesResult>;
 }

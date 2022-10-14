@@ -1,3 +1,5 @@
+import { left, right } from '@sweet-monads/either';
+
 import { MultiSelect2, NotionDb, Select2 } from '@services';
 
 import {
@@ -6,6 +8,7 @@ import {
   PropertiesResult,
   Library,
   AddResult,
+  SearchLibraryResult,
 } from '../Repository';
 
 export class NotionDbRepository implements DatabaseRepository {
@@ -45,7 +48,7 @@ export class NotionDbRepository implements DatabaseRepository {
     return response;
   }
 
-  async searchLibrary(query: string): Promise<SearchResult> {
+  async searchLibraries(query: string): Promise<SearchResult> {
     const result = await this.#db.findByQuery(query);
 
     return result.mapRight((res) => {
@@ -61,5 +64,34 @@ export class NotionDbRepository implements DatabaseRepository {
         Review: data.Review.rich_text[0]?.plain_text ?? null,
       }));
     });
+  }
+
+  async searchLibraryByName(name: string): Promise<SearchLibraryResult> {
+    const result = await this.#db.findByQuery(name);
+
+    return result
+      .mapRight((libraries) => {
+        return libraries.map(({ data }) => ({
+          Name: data.Name.title[0].plain_text,
+          Platform: data.Platform.select?.name ?? null,
+          'Repo link': data['Repo link'].url,
+          'NPM weekly downloads': data['NPM weekly downloads'].number,
+          Tags: data.Tags.multi_select.map(({ name }) => name),
+          Summary: data.Summary.rich_text[0]?.plain_text ?? null,
+          Status: data.Status.select?.name ?? null,
+          'Score /5': data['Score /5'].select?.name ?? null,
+          Review: data.Review.rich_text[0]?.plain_text ?? null,
+        }));
+      })
+      .mapRight((libraries) => {
+        const library = libraries.find((library) => library.Name === name);
+
+        if (!library) {
+          return left(new Error(`Can't find library with name "${name}"`));
+        }
+
+        return right(library);
+      })
+      .join();
   }
 }
