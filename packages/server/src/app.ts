@@ -1,26 +1,24 @@
 import fastify from 'fastify';
 import { fastifyAwilixPlugin } from '@fastify/awilix';
 
+import { apiRoutes } from './routes/index.js';
+
+import { createDIContainer } from './diContainer';
+
 const app = fastify({ logger: true });
 
+app.addHook('onRequest', (request, reply, done) => {
+  // TODO: auth check goes here
+  done();
+});
+
 app.register(fastifyAwilixPlugin, { disposeOnClose: true, disposeOnResponse: true });
+createDIContainer();
+app.register(apiRoutes, { prefix: '/api' });
 
 app.get('/healthcheck', async (request, reply) => {
   return 'ok';
 });
-
-app.get(
-  '/check-library',
-  { schema: { querystring: { name: { type: 'string' } } } },
-  async (request, reply) => {
-    if (!request.query.name) {
-      return reply.code(400).send({ error: `you should specify "name" param` });
-    }
-
-    // return `requested library: ${String(request.query)}`;
-    return `requested library: kek`;
-  },
-);
 
 const start = async () => {
   try {
