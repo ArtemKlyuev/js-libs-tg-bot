@@ -11,6 +11,7 @@
     "sourceMap": false,
     "moduleResolution": "node",
     "removeComments": true,
+    "noEmitOnError": false,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
@@ -30,5 +31,8 @@
       "@controllers": ["./src/controllers/index.ts"],
       "@utils": ["./src/utils/index.ts"]
     }
+  },
+  "ts-node": {
+    "swc": true
   }
 }
