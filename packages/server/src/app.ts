@@ -24,8 +24,8 @@ app.get(
 
 const start = async () => {
   try {
-    await app.listen({ port: 3000 });
-    console.log(`Server started at port ${3000}`);
+    const url = await app.listen({ port: 3000 });
+    console.log(`Server started at ${url}`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
