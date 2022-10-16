@@ -1,1 +1,1 @@
-export * from './findLibrary';
+export * from './findLibrary/index.js';
