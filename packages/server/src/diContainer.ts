@@ -2,12 +2,13 @@ import { diContainer } from '@fastify/awilix';
 import { asFunction, asValue, Lifetime } from 'awilix';
 
 import { Config } from './config';
-import { NotionDatabase } from './services';
+import { NotionDatabase, GithubAPI } from './services';
 import { NotionDbRepository } from './repository';
 
 export const createDIContainer = () => {
   diContainer.register({
     config: asValue(Config.env),
+    github: asFunction(() => GithubAPI).singleton(),
     notionDb: asFunction(
       ({ config }) => {
         return new NotionDatabase({
