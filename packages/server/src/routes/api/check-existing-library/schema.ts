@@ -2,7 +2,7 @@ import { Static, Type } from '@sinclair/typebox';
 import { FastifySchema } from 'fastify';
 
 const queryStringSchema = Type.Object({
-  name: Type.Optional(Type.String()),
+  name: Type.String(),
 });
 
 const responseSchema = Type.Object({
