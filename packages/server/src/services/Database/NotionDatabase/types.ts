@@ -64,6 +64,7 @@ export interface SearchResultProperties {
   Platform: Select;
   'Repo link': URL;
   'NPM weekly downloads': Number;
+  'github stars': Number;
   Tags: MultiSelect;
   Summary: RichText;
   Status: Select;
