@@ -1,10 +1,11 @@
 import { FastifyPluginAsync, RequestGenericInterface } from 'fastify';
+import { ReplyGenericInterface } from 'fastify/types/reply';
 
 import { findLibrary } from '@controllers';
 
 import { Querystring, Reply, schema } from './schema';
 
-interface RouteConfig extends RequestGenericInterface {
+interface RouteConfig extends RequestGenericInterface, ReplyGenericInterface {
   Querystring: Querystring;
   Reply: Reply;
 }
