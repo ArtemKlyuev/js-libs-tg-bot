@@ -9,13 +9,20 @@ interface Route extends RequestGenericInterface, ReplyGenericInterface {
 }
 
 export const addLibraryRoute: FastifyPluginAsync = async (app) => {
-  app.post<Route>('/add-library', { schema }, async (request, reply) => {
-    const { name } = request.body;
+  app.post<Route>(
+    '/add-library',
+    {
+      schema,
+      errorHandler(error, request, reply) {
+        if ('validation' in error) {
+          return reply.status(error.statusCode!).send({ error: error.message, created: false });
+        }
 
-    if (!name) {
-      return reply
-        .code(400)
-        .send({ error: `you should specify "name" body param`, created: false });
-    }
-  });
+        throw error;
+      },
+    },
+    async (request, reply) => {
+      const { name, platform, status, tags, review, score } = request.body;
+    },
+  );
 };
