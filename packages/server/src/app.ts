@@ -1,7 +1,7 @@
 import fastify from 'fastify';
 import { fastifyAwilixPlugin } from '@fastify/awilix';
 
-import { apiRoutes } from './routes/index.js';
+import { apiRoutes } from './routes';
 
 import { createDIContainer } from './diContainer';
 
