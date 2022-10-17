@@ -1,6 +1,6 @@
 import { left, right } from '@sweet-monads/either';
 
-import { MultiSelect2, NotionDb, Select2 } from '@services';
+import { MultiSelect2, NotionDb, Select2, FindByQueryError } from '@services';
 
 import {
   DatabaseRepository,
@@ -67,27 +67,14 @@ export class NotionDbRepository implements DatabaseRepository {
   }
 
   async searchLibraryByName(name: string): Promise<SearchLibraryResult> {
-    const result = await this.#db.findByQuery(name);
+    const eitherLibraries = await this.searchLibraries(name);
 
-    return result
+    return eitherLibraries
       .mapRight((libraries) => {
-        return libraries.map(({ data }) => ({
-          Name: data.Name.title[0].plain_text,
-          Platform: data.Platform.select?.name ?? null,
-          'Repo link': data['Repo link'].url,
-          'NPM weekly downloads': data['NPM weekly downloads'].number,
-          Tags: data.Tags.multi_select.map(({ name }) => name),
-          Summary: data.Summary.rich_text[0]?.plain_text ?? null,
-          Status: data.Status.select?.name ?? null,
-          'Score /5': data['Score /5'].select?.name ?? null,
-          Review: data.Review.rich_text[0]?.plain_text ?? null,
-        }));
-      })
-      .mapRight((libraries) => {
-        const library = libraries.find((library) => library.Name === name);
+        const library = libraries.find((library) => library.Name.toLowerCase().includes(name));
 
         if (!library) {
-          return left(new Error(`Can't find library with name "${name}"`));
+          return left(new FindByQueryError(name));
         }
 
         return right(library);
