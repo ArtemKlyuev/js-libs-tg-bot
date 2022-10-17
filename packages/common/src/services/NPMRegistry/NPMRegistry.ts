@@ -1,31 +1,15 @@
-import { Either, left, right } from '@sweet-monads/either';
+import { left, right } from '@sweet-monads/either';
+import { getPackument, getPackageDownloads } from 'query-registry';
+
 import {
-  Packument,
-  FetchError,
-  PackageDownloads,
-  DownloadPeriod,
-  getPackument,
-  getPackageDownloads,
-  InvalidPackageNameError,
-  GitRepository,
-} from 'query-registry';
+  NPMRegistry,
+  PackageInfoResult,
+  PackageDownloadsResult,
+  PackageInfo,
+  Options,
+} from './types';
 
-interface SpecificGitRepository extends GitRepository {
-  owner: string | null;
-  name: string | null;
-}
-
-export type PackageInfo = Packument & { gitRepository: SpecificGitRepository };
-export type PackageNameError = typeof InvalidPackageNameError;
-export type PackageDownloadsError = FetchError;
-
-export type { FetchError };
-
-interface Options {
-  point: DownloadPeriod;
-}
-
-export class NPMRegistry {
+export const NPMRegistryAPI: NPMRegistry = class NPMRegistryAPI {
   static #getGithubOwner(repoURL?: string): string | null {
     if (!repoURL) {
       return null;
@@ -42,9 +26,7 @@ export class NPMRegistry {
     return repoURL.split('/').at(-1) ?? null;
   }
 
-  static async getPackageInfo(
-    name: string,
-  ): Promise<Either<PackageNameError | FetchError, PackageInfo>> {
+  static async getPackageInfo(name: string): Promise<PackageInfoResult> {
     try {
       const response = await getPackument({ name });
 
@@ -65,7 +47,7 @@ export class NPMRegistry {
   static async getPackageDownloads(
     name: string,
     options: Options,
-  ): Promise<Either<PackageDownloadsError, PackageDownloads>> {
+  ): Promise<PackageDownloadsResult> {
     try {
       const response = await getPackageDownloads({ name, period: options.point });
 
@@ -74,4 +56,4 @@ export class NPMRegistry {
       return left(error);
     }
   }
-}
+};
