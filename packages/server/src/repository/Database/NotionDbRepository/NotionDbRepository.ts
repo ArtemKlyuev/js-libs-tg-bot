@@ -53,15 +53,16 @@ export class NotionDbRepository implements DatabaseRepository {
 
     return result.mapRight((res) => {
       return res.map(({ data }) => ({
-        Name: data.Name.title[0].plain_text,
-        Platform: data.Platform.select?.name ?? null,
-        'Repo link': data['Repo link'].url,
-        'NPM weekly downloads': data['NPM weekly downloads'].number,
-        Tags: data.Tags.multi_select.map(({ name }) => name),
-        Summary: data.Summary.rich_text[0]?.plain_text ?? null,
-        Status: data.Status.select?.name ?? null,
-        'Score /5': data['Score /5'].select?.name ?? null,
-        Review: data.Review.rich_text[0]?.plain_text ?? null,
+        name: data.Name.title[0].plain_text,
+        platform: data.Platform.select?.name!,
+        tags: data.Tags.multi_select.map(({ name }) => name),
+        repoURL: data['Repo link'].url,
+        npmDownloads: data['NPM weekly downloads'].number,
+        githubStars: data['github stars'].number,
+        summary: data.Summary.rich_text[0]?.plain_text ?? null,
+        status: data.Status.select?.name ?? null,
+        score: data['Score /5'].select?.name ?? null,
+        review: data.Review.rich_text[0]?.plain_text ?? null,
       }));
     });
   }
@@ -71,7 +72,7 @@ export class NotionDbRepository implements DatabaseRepository {
 
     return eitherLibraries
       .mapRight((libraries) => {
-        const library = libraries.find((library) => library.Name.toLowerCase().includes(name));
+        const library = libraries.find((library) => library.name.toLowerCase().includes(name));
 
         if (!library) {
           return left(new FindByQueryError(name));
