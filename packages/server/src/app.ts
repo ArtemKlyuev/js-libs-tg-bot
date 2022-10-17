@@ -5,7 +5,24 @@ import { apiRoutes } from './routes';
 
 import { createDIContainer } from './diContainer';
 
-const app = fastify({ logger: true });
+const envToLogger = {
+  development: {
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'HH:MM:ss Z',
+        ignore: 'pid,hostname',
+      },
+    },
+  },
+  production: true,
+  test: false,
+};
+
+const env = process.env.NODE_ENV!;
+
+// @ts-expect-error
+const app = fastify({ logger: envToLogger[env] ?? true });
 
 app.addHook('onRequest', (request, reply, done) => {
   // TODO: auth check goes here
