@@ -16,6 +16,7 @@
     "@sinclair/typebox": "0.24.46",
     "@sweet-monads/either": "3.1.0",
     "awilix": "7.0.3",
+    "common": "1.0.0",
     "fastify": "4.8.1",
     "telegraf": "4.8.3"
   },
