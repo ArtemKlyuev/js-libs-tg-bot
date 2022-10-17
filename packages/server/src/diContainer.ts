@@ -1,5 +1,6 @@
 import { diContainer } from '@fastify/awilix';
 import { asFunction, asValue, Lifetime } from 'awilix';
+import { NPMRegistryAPI } from 'common/services';
 
 import { Config } from './config';
 import { NotionDatabase, GithubAPI } from './services';
@@ -30,5 +31,6 @@ export const createDIContainer = () => {
         // dispose: (module) => module.dispose(),
       },
     ),
+    npmRegistry: asFunction(() => NPMRegistryAPI).singleton(),
   });
 };
