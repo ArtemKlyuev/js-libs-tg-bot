@@ -1,31 +1,32 @@
-import { FastifyPluginCallback } from 'fastify';
+import { FastifyPluginAsync, RequestGenericInterface } from 'fastify';
 
 import { findLibrary } from '@controllers';
 
-export const checkExistingLibraryRoute: FastifyPluginCallback = async (app) => {
-  app.get(
-    '/check-existing-library',
-    { schema: { querystring: { name: { type: 'string' } } } },
-    async (request, reply) => {
-      const { name } = request.query;
+import { Querystring, Reply, schema } from './schema';
 
-      if (!name) {
-        return reply
-          .code(400)
-          .send({ error: `you should specify "name" query param`, exist: false });
-      }
+interface RouteConfig extends RequestGenericInterface {
+  Querystring: Querystring;
+  Reply: Reply;
+}
 
-      const dbRepository = app.diContainer.resolve('notionRepository');
+export const checkExistingLibraryRoute: FastifyPluginAsync = async (app) => {
+  app.get<RouteConfig>('/check-existing-library', { schema }, async (request, reply) => {
+    const { name } = request.query;
 
-      const result = await findLibrary(name, dbRepository);
+    if (!name) {
+      return reply.code(400).send({ error: `you should specify "name" query param`, exist: false });
+    }
 
-      result
-        .mapRight(() => {
-          reply.status(200).send({ error: null, exist: true });
-        })
-        .mapLeft(({ message }) => {
-          reply.status(400).send({ error: message, exist: false });
-        });
-    },
-  );
+    const dbRepository = app.diContainer.resolve('notionRepository');
+
+    const result = await findLibrary(name, dbRepository);
+
+    result
+      .mapRight(() => {
+        reply.status(200).send({ error: null, exist: true });
+      })
+      .mapLeft(({ message }) => {
+        reply.status(400).send({ error: message, exist: false });
+      });
+  });
 };
