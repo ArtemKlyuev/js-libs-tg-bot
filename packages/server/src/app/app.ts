@@ -26,8 +26,7 @@ export const createApp = ({ port }: Options = { port: 3000 }) => {
 
   const start = async () => {
     try {
-      const url = await app.listen({ port });
-      console.log(`Server started at ${url}`);
+      await app.listen({ port });
     } catch (err) {
       app.log.error(err);
       process.exit(1);
