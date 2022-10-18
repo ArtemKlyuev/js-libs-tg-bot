@@ -1,6 +1,8 @@
 import { FastifyPluginAsync, RequestGenericInterface } from 'fastify';
 import { ReplyGenericInterface } from 'fastify/types/reply';
 
+import { isValidationError } from '@utils';
+
 import { Body, Reply, schema } from './schema';
 
 interface Route extends RequestGenericInterface, ReplyGenericInterface {
@@ -14,8 +16,8 @@ export const addLibraryRoute: FastifyPluginAsync = async (app) => {
     {
       schema,
       errorHandler(error, request, reply) {
-        if ('validation' in error) {
-          return reply.status(error.statusCode!).send({ error: error.message, created: false });
+        if (isValidationError(error)) {
+          return reply.status(error.statusCode).send({ error: error.message, created: false });
         }
 
         throw error;

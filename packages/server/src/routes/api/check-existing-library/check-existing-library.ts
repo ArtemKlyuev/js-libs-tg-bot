@@ -2,6 +2,7 @@ import { FastifyPluginAsync, RequestGenericInterface } from 'fastify';
 import { ReplyGenericInterface } from 'fastify/types/reply';
 
 import { findLibrary } from '@controllers';
+import { isValidationError } from '@utils';
 
 import { Querystring, Reply, schema } from './schema';
 
@@ -16,8 +17,8 @@ export const checkExistingLibraryRoute: FastifyPluginAsync = async (app) => {
     {
       schema,
       errorHandler(error, request, reply) {
-        if ('validation' in error) {
-          return reply.status(error.statusCode!).send({ error: error.message, exist: false });
+        if (isValidationError(error)) {
+          return reply.status(error.statusCode).send({ error: error.message, exist: false });
         }
 
         throw error;
