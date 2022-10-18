@@ -1,6 +1,6 @@
 import { DatabaseRepository, SearchResult } from '@repository';
 
-export const searchLibrary = async (
+export const searchLibraryByQuery = async (
   // TODO: add filters
   query: string,
   databaseRepository: DatabaseRepository,
