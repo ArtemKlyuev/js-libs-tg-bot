@@ -1,6 +1,7 @@
 import { FastifyPluginAsync, RequestGenericInterface } from 'fastify';
 import { ReplyGenericInterface } from 'fastify/types/reply';
 
+import { addLibrary } from '@controllers';
 import { isValidationError } from '@utils';
 
 import { Body, Reply, schema } from './schema';
@@ -24,7 +25,19 @@ export const addLibraryRoute: FastifyPluginAsync = async (app) => {
       },
     },
     async (request, reply) => {
-      const { name, platform, status, tags, review, score } = request.body;
+      const dbRepository = app.diContainer.resolve('notionRepository');
+      const github = app.diContainer.resolve('github');
+      const npmRegistry = app.diContainer.resolve('npmRegistry');
+
+      const result = await addLibrary(request.body, { dbRepository, github, npmRegistry });
+
+      result
+        .mapRight(() => {
+          reply.status(201).send({ error: null, created: true });
+        })
+        .mapLeft(() => {
+          reply.status(400).send({ error: 'error', created: false });
+        });
     },
   );
 };
