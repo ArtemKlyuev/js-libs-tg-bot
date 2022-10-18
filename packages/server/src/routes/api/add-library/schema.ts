@@ -17,7 +17,7 @@ const responseSchema = Type.Object({
 
 export const schema: FastifySchema = {
   body: bodySchema,
-  response: { 200: responseSchema, 400: responseSchema },
+  response: { 201: responseSchema, 400: responseSchema },
 };
 
 export type Body = Static<typeof bodySchema>;
