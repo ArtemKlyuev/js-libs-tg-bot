@@ -13,7 +13,7 @@ interface RouteConfig extends RequestGenericInterface, ReplyGenericInterface {
 
 export const checkExistingLibraryRoute: FastifyPluginAsync = async (app) => {
   app.get<RouteConfig>(
-    '/check-existing-library',
+    '/check-existing',
     {
       schema,
       errorHandler(error, request, reply) {

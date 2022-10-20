@@ -12,8 +12,8 @@ interface Route extends RequestGenericInterface, ReplyGenericInterface {
 }
 
 export const addLibraryRoute: FastifyPluginAsync = async (app) => {
-  app.post<Route>(
-    '/add-library',
+  app.put<Route>(
+    '/add',
     {
       schema,
       errorHandler(error, request, reply) {
