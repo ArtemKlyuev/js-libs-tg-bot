@@ -72,7 +72,7 @@ export class NotionDbRepository implements DatabaseRepository {
 
     return eitherLibraries
       .mapRight((libraries) => {
-        const library = libraries.find((library) => library.name.toLowerCase().includes(name));
+        const library = libraries.find((library) => library.name.toLowerCase() === name);
 
         if (!library) {
           return left(new FindByQueryError(name));
