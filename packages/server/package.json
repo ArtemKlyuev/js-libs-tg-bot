@@ -18,7 +18,9 @@
     "awilix": "7.0.3",
     "common": "1.0.0",
     "fastify": "4.8.1",
-    "telegraf": "4.8.3"
+    "telegraf": "4.8.3",
+    "zod": "3.19.1",
+    "zod-to-json-schema": "3.18.1"
   },
   "devDependencies": {
     "@swc/core": "1.2.203",
