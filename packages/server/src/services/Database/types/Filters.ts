@@ -7,6 +7,8 @@ interface Sort {
   direction: 'ascending' | 'descending';
 }
 
+export interface FiltersError extends Error {}
+
 export interface FiltersConfig {
   filters: Filters;
   sorts?: Sort[];
