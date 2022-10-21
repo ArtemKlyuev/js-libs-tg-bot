@@ -35,8 +35,13 @@ export const addLibraryRoute: FastifyPluginAsync = async (app) => {
         .mapRight(() => {
           reply.status(201).send({ error: null, created: true });
         })
-        .mapLeft(() => {
-          reply.status(400).send({ error: 'error', created: false });
+        .mapLeft((errors) => {
+          const message = Array.isArray(errors)
+            ? // @ts-expect-error
+              errors[0]?.message
+            : // @ts-expect-error
+              errors?.message ?? 'Unknown error';
+          reply.status(400).send({ error: message, created: false });
         });
     },
   );
