@@ -19,6 +19,8 @@ const definedQueryStringSchema = JSONSchema.defineSchema
     ]),
     summary: JSONSchema.defineSchema.string().min(1),
     score: JSONSchema.defineSchema.enum(['1', '2', '3', '4', '5']),
+    sort: JSONSchema.defineSchema.string().min(1),
+    direction: JSONSchema.defineSchema.enum(['ascending', 'descending']).default('descending'),
   })
   .partial();
 
