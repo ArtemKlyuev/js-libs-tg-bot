@@ -24,9 +24,17 @@ export const checkExistingLibraryRoute: FastifyPluginAsync = async (app) => {
       },
     },
     async (request, reply) => {
-      const querystringKeys = Object.keys(request.query);
+      const { sort, direction, ...filtersQuery } = request.query;
 
-      if (!querystringKeys.length) {
+      if (!sort && direction) {
+        return reply
+          .status(422)
+          .send({ error: '"sort" param must be defined when defining "direction"', results: [] });
+      }
+
+      const filtersKeys = Object.keys(filtersQuery);
+
+      if (!filtersKeys.length) {
         return reply
           .status(422)
           .send({ error: 'Filters must have minimum 1 active filter', results: [] });
