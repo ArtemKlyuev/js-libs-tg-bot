@@ -1,6 +1,6 @@
 import { Either } from '@sweet-monads/either';
 
-import { FindError } from '@services';
+import { FindError, FiltersError } from '@services';
 
 // TODO: избавиться от `null` у `summary`, `repoURL`, `npmDownloads`, `githubStars`, `status`
 export interface LegacyLibraryData {
@@ -38,8 +38,24 @@ export interface Library {
 
 export type SearchResult = Either<FindError, LegacyLibraryData[]>;
 export type SearchLibraryResult = Either<FindError, LegacyLibraryData>;
+export type SearchByFiltersResult = Either<FiltersError, LegacyLibraryData[]>;
 export type PropertiesResult = Either<Error, Properties>;
 export type AddResult = Either<Error, void>;
+
+interface Filter {
+  property: string;
+  value: boolean | string | number | string[] | number[];
+}
+
+interface Sort {
+  property: string;
+  direction: 'ascending' | 'descending';
+}
+
+export interface RespositoryFiltersConfig {
+  filters: Filter[];
+  sorts: Sort;
+}
 
 export interface DatabaseRepository {
   /**
@@ -47,6 +63,9 @@ export interface DatabaseRepository {
    */
   searchLibraries: (query: string) => Promise<SearchResult>;
   searchLibraryByName: (name: string) => Promise<SearchLibraryResult>;
+  searchLibraryByFilters: (
+    filtersConfig: RespositoryFiltersConfig,
+  ) => Promise<SearchByFiltersResult>;
   addLibrary: (library: Library) => Promise<AddResult>;
   getProperties: () => Promise<PropertiesResult>;
 }

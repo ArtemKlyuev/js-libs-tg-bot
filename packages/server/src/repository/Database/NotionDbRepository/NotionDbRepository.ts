@@ -9,6 +9,8 @@ import {
   Library,
   AddResult,
   SearchLibraryResult,
+  SearchByFiltersResult,
+  RespositoryFiltersConfig,
 } from '../Repository';
 
 export class NotionDbRepository implements DatabaseRepository {
@@ -81,5 +83,27 @@ export class NotionDbRepository implements DatabaseRepository {
         return right(library);
       })
       .join();
+  }
+
+  async searchLibraryByFilters({
+    filters,
+    sorts,
+  }: RespositoryFiltersConfig): Promise<SearchByFiltersResult> {
+    const result = await this.#db.findByFilters({ filters: { and: [{}] }, sorts: [sorts] });
+
+    return result.mapRight((res) => {
+      return res.map(({ data }) => ({
+        name: data.Name.title[0].plain_text,
+        platform: data.Platform.select?.name!,
+        tags: data.Tags.multi_select.map(({ name }) => name),
+        repoURL: data['Repo link'].url,
+        npmDownloads: data['NPM weekly downloads'].number,
+        githubStars: data['github stars'].number,
+        summary: data.Summary.rich_text[0]?.plain_text ?? null,
+        status: data.Status.select?.name ?? null,
+        score: data['Score /5'].select?.name ?? null,
+        review: data.Review.rich_text[0]?.plain_text ?? null,
+      }));
+    });
   }
 }
