@@ -24,12 +24,14 @@ export const addLibrary = async (
     await npmRegistry.getPackageDownloads(libraryData.name, { point: 'last-week' })
   ).mapRight(({ downloads }) => downloads);
 
-  const eitherNPMInfo = (await npm.asyncMap(getLibraryWithGithubInfo(libraryData, github))).join();
+  const eitherPackageInfoWithGithub = (
+    await npm.asyncMap(getLibraryWithGithubInfo(libraryData, github))
+  ).join();
 
-  const eitherFullNPMInfo = mergeInMany([eitherNPMInfo, eitherDownloads]);
+  const eitherFullPackageInfo = mergeInMany([eitherPackageInfoWithGithub, eitherDownloads]);
 
   const result = (
-    await eitherFullNPMInfo.asyncMap(([lib, npmDownloads]) => {
+    await eitherFullPackageInfo.asyncMap(([lib, npmDownloads]) => {
       return dbRepository.addLibrary({
         ...lib,
         npmDownloads,
