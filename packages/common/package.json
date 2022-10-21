@@ -26,6 +26,7 @@
     }
   },
   "scripts": {
+    "postinstall": "patch-package",
     "typecheck": "tsc --noEmit --pretty"
   },
   "dependencies": {
