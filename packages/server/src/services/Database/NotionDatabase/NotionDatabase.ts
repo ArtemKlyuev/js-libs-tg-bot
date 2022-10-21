@@ -1,7 +1,15 @@
 import { left, right } from '@sweet-monads/either';
 import { Client } from '@notionhq/client';
 
-import { DatabaseInfo, Database, InsertResult, QueryResult } from '../Database';
+import {
+  DatabaseInfo,
+  Database,
+  InsertResult,
+  QueryResult,
+  FiltersResult,
+  FindError,
+  FiltersConfig,
+} from '../types';
 
 import {
   Config,
@@ -100,6 +108,17 @@ export class NotionDatabase implements NotionDb {
 
       // @ts-expect-error Всё нормально
       return right(result);
+    } catch (error) {
+      return left(error);
+    }
+  }
+
+  async findByFilters({
+    filters,
+    sort,
+  }: FiltersConfig): Promise<FiltersResult<FindError, SearchResultProperties>> {
+    try {
+      const response = await this.#notion.databases.query({ database_id: this.#databaseID });
     } catch (error) {
       return left(error);
     }
