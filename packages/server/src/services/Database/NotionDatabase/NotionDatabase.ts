@@ -4,10 +4,10 @@ import { Client } from '@notionhq/client';
 import {
   DatabaseInfo,
   Database,
+  FiltersError,
   InsertResult,
   QueryResult,
   FiltersResult,
-  FindError,
   FiltersConfig,
 } from '../types';
 
@@ -19,7 +19,7 @@ import {
   SearchResultProperties,
   NotionDatabaseSignature,
 } from './types';
-import { FindByQueryError } from './errors';
+import { FindByFiltersError, FindByQueryError } from './errors';
 import { MultiSelect, Number, RichText, Select, Title, URL } from './properties2';
 
 export interface NotionDb
@@ -115,12 +115,31 @@ export class NotionDatabase implements NotionDb {
 
   async findByFilters({
     filters,
-    sort,
-  }: FiltersConfig): Promise<FiltersResult<FindError, SearchResultProperties>> {
+    sorts,
+  }: FiltersConfig): Promise<FiltersResult<FiltersError, SearchResultProperties>> {
     try {
-      const response = await this.#notion.databases.query({ database_id: this.#databaseID });
+      const response = await this.#notion.databases.query({
+        database_id: this.#databaseID,
+        filter: filters,
+        sorts,
+      });
+
+      if (!response.results.length) {
+        throw new FindByFiltersError('Ничего не найдено!');
+      }
+
+      const result = (response.results as SearchResponsePageResultProperties[]).map(
+        ({ id, properties: data }) => ({ id, data }),
+      );
+
+      // @ts-expect-error Всё нормально
+      return right(result);
     } catch (error) {
-      return left(error);
+      if (error instanceof FindByFiltersError) {
+        return left(error);
+      }
+
+      return left(new FindByFiltersError(error.message));
     }
   }
 }

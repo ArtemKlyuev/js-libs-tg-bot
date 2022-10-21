@@ -1,6 +1,6 @@
 import { Either } from '@sweet-monads/either';
 
-import { FiltersConfig } from './Filters';
+import { FiltersConfig, FiltersError } from './Filters';
 
 export interface InsertError extends Error {
   code: number;
@@ -20,7 +20,7 @@ export type DatabaseInfo<Error, Data> = Either<Error, Data>;
 
 export interface Database<InsertData, QueryData, DatabaseSignature> {
   insert: (data: InsertData) => Promise<InsertResult>;
-  findByFilters: (config: FiltersConfig) => Promise<FiltersResult<FindError, QueryData>>;
+  findByFilters: (config: FiltersConfig) => Promise<FiltersResult<FiltersError, QueryData>>;
   findByQuery: (query: string) => Promise<QueryResult<FindError, QueryData>>;
   getDatabaseInfo: () => Promise<DatabaseInfo<Error, DatabaseSignature>>;
 }
