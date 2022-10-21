@@ -15,7 +15,7 @@ const definedBodySchema = JSONSchema.defineSchema.object({
     'done',
   ]),
   score: JSONSchema.defineSchema.enum(['1', '2', '3', '4', '5']).optional(),
-  review: JSONSchema.defineSchema.string().optional(),
+  review: JSONSchema.defineSchema.string().min(1).optional(),
 });
 
 const bodySchema = JSONSchema.toJSONSchema(definedBodySchema);
