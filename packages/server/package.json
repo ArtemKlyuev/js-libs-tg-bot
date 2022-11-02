@@ -8,7 +8,6 @@
     "postinstall": "patch-package",
     "typecheck": "tsc --noEmit --pretty",
     "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
-    "dev:debug": "cross-env DEBUG='telegraf:*' yarn dev",
     "start": "node build/index.js",
     "build": "ts-node scripts/build.ts --swc"
   },
