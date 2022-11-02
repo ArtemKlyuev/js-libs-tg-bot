@@ -12,7 +12,7 @@ interface Props {
 export const Checkbox = forwardRef<HTMLInputElement, Props>(({ label, ...props }, ref) => {
   return (
     <div className="form-control">
-      <label className="label cursor-pointer">
+      <label className="label cursor-pointer justify-start gap-[15px]">
         <input ref={ref} type="checkbox" className="checkbox checkbox-accent" {...props} />
         <span className="label-text">{label}</span>
       </label>
