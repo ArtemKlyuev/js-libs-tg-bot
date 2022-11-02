@@ -1,7 +1,13 @@
-import { PackageInfo, PackageNameError, FetchError, NPMRegistry } from 'common/services';
+import {
+  PackageInfo,
+  PackageNameError,
+  FetchError,
+  NPMRegistry,
+  NPMRegistryAPI,
+} from 'common/services';
 
 export type { PackageInfo, PackageNameError, FetchError };
 
-export const useNPMRegistry = (): typeof NPMRegistry => {
-  return NPMRegistry;
+export const useNPMRegistry = (): NPMRegistry => {
+  return NPMRegistryAPI;
 };
