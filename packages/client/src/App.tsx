@@ -1,4 +1,4 @@
-import { Checkbox, Fieldset, Input, InputLabel, Radio } from './components';
+import { Checkbox, Fieldset, Input, InputLabel, Radio, Textarea } from './components';
 import { useDebouncedSearch, useLibraryStatus } from './hooks';
 
 export const App = () => {
@@ -43,6 +43,7 @@ export const App = () => {
         <Radio name="rating" value="backend" label="Backend" />
         <Radio name="rating" value="isomorphic" label="Isomorphic" />
       </Fieldset>
+      <Textarea label="Напишите ревью" placeholder="Review" />
     </main>
   );
 };
