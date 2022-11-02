@@ -11,7 +11,7 @@ interface Options extends Omit<UseDebounceOptions<any>, 'callback'> {
   onSearch: (value: string) => void;
 }
 
-export const useDebouncedSearch = ({ onSearch, ...options }: Options): Result => {
+export const useDebouncedInput = ({ onSearch, ...options }: Options): Result => {
   const [value, setValue] = useState('');
   const debouncedCallback = useDebounce({
     callback: (value: string) => {

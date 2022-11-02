@@ -9,12 +9,12 @@ import {
   Spinner,
   Textarea,
 } from './components';
-import { useDebouncedSearch, useLibraryStatus } from './hooks';
+import { useDebouncedInput, useLibraryStatus } from './hooks';
 
 export const App = () => {
   const { setLibrary } = useLibraryStatus();
 
-  const { value, setValue } = useDebouncedSearch({
+  const { value, setValue } = useDebouncedInput({
     onSearch: (value) => {
       console.log('value changed:', value);
       setLibrary(value);
