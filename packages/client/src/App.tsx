@@ -6,6 +6,7 @@ import {
   Input,
   InputLabel,
   Radio,
+  Spinner,
   Textarea,
 } from './components';
 import { useDebouncedSearch, useLibraryStatus } from './hooks';
@@ -54,8 +55,11 @@ export const App = () => {
           <Radio name="rating" value="isomorphic" label="Isomorphic" />
         </Fieldset>
         <Textarea label="Напишите ревью" placeholder="Review" />
-        <Button type="submit">Добавить</Button>
+        <Button type="submit" loading>
+          Добавить
+        </Button>
         <Alert type="success" message="Your purchase has been confirmed!" />
+        <Spinner />
       </form>
     </main>
   );
