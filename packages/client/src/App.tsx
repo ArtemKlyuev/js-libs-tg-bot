@@ -1,4 +1,13 @@
-import { Button, Checkbox, Fieldset, Input, InputLabel, Radio, Textarea } from './components';
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Fieldset,
+  Input,
+  InputLabel,
+  Radio,
+  Textarea,
+} from './components';
 import { useDebouncedSearch, useLibraryStatus } from './hooks';
 
 export const App = () => {
@@ -46,6 +55,7 @@ export const App = () => {
         </Fieldset>
         <Textarea label="Напишите ревью" placeholder="Review" />
         <Button type="submit">Добавить</Button>
+        <Alert type="success" message="Your purchase has been confirmed!" />
       </form>
     </main>
   );
