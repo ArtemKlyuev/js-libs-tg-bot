@@ -1,6 +1,7 @@
 import { Either } from '@sweet-monads/either';
 
-import { FindError, FiltersError } from '@services';
+import { DbProperty } from '@services/Database';
+import { DbProperty as DbPropertyModel } from '../../models';
 
 // TODO: избавиться от `null` у `summary`, `repoURL`, `npmDownloads`, `githubStars`, `status`
 export interface LegacyLibraryData {
@@ -16,31 +17,28 @@ export interface LegacyLibraryData {
   review: string | null;
 }
 
-export interface Properties {
-  platforms: string[];
-  tags: string[];
-  statuses: string[];
-  scores: string[];
-}
-
-export interface Library {
+interface SearchedLibraryData {
+  id: string;
   name: string;
-  platform: string;
-  repoURL: string;
-  npmDownloads: number;
-  githubStars: number;
-  summary: string;
-  tags: string[];
-  status: string;
-  score?: string;
-  review?: string;
+  value: { id: string; name: string }[] | { id: string; name: string } | string | number | null;
 }
 
-export type SearchResult = Either<FindError, LegacyLibraryData[]>;
-export type SearchLibraryResult = Either<FindError, LegacyLibraryData>;
-export type SearchByFiltersResult = Either<FiltersError, LegacyLibraryData[]>;
-export type PropertiesResult = Either<Error, Properties>;
-export type AddResult = Either<Error, void>;
+interface ErrorWithCode extends Error {
+  code: number;
+}
+
+export type LibraryInfo = InsertedProperty[];
+
+interface InsertedProperty<Value = string[] | string | number | null> {
+  id: string;
+  value: Value;
+}
+
+export type SearchResult = Either<ErrorWithCode, SearchedLibraryData[][]>;
+export type SearchLibraryResult = Either<ErrorWithCode, SearchedLibraryData[]>;
+export type SearchByFiltersResult = Either<ErrorWithCode, LegacyLibraryData[]>;
+export type PropertiesResult = Either<ErrorWithCode, DbProperty[]>;
+export type AddResult = Either<ErrorWithCode, void>;
 
 interface Filter {
   property: string;
@@ -54,7 +52,7 @@ interface Sort {
 
 export interface RespositoryFiltersConfig {
   filters: Filter[];
-  sorts: Sort;
+  sort?: Sort;
 }
 
 export interface DatabaseRepository {
@@ -66,6 +64,7 @@ export interface DatabaseRepository {
   searchLibraryByFilters: (
     filtersConfig: RespositoryFiltersConfig,
   ) => Promise<SearchByFiltersResult>;
-  addLibrary: (library: Library) => Promise<AddResult>;
+  // addLibrary: (library: Library) => Promise<AddResult>;
+  addLibrary: (library: DbPropertyModel[]) => Promise<AddResult>;
   getProperties: () => Promise<PropertiesResult>;
 }

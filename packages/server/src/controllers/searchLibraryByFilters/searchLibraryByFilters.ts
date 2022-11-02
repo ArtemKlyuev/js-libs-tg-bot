@@ -11,13 +11,21 @@ interface Filters {
   score: string;
 }
 
-export type SearchFilters = Partial<Filters>;
+interface Sort {
+  property: string;
+  direction: 'ascending' | 'descending';
+}
+
+export interface SearchFilters {
+  filters: Partial<Filters>;
+  sort?: Sort;
+}
 
 interface Dependencies {
   dbRepository: DatabaseRepository;
 }
 
 export const searchLibraryByFilters = (
-  filters: SearchFilters,
+  { filters, sort }: SearchFilters,
   { dbRepository }: Dependencies,
 ) => {};

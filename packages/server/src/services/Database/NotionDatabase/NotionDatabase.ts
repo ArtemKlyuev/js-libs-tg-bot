@@ -4,26 +4,28 @@ import { Client } from '@notionhq/client';
 import {
   DatabaseInfo,
   Database,
-  FiltersError,
   InsertResult,
   QueryResult,
-  FiltersResult,
+  SearchByFiltersResult,
   FiltersConfig,
+  DatabaseError,
 } from '../types';
+import {
+  DatabaseFindByFiltersError,
+  DatabaseFindByQueryError,
+  DatabaseGetInfoError,
+  DatabaseInsertError,
+} from '../errors';
 
 import {
   Config,
-  InsertData,
-  RequestError,
   SearchResponsePageResultProperties,
-  SearchResultProperties,
-  NotionDatabaseSignature,
+  DbPropertiesInsert,
+  NotionDB,
+  SearchResultProperty,
 } from './types';
-import { FindByFiltersError, FindByQueryError } from './errors';
-import { MultiSelect, Number, RichText, Select, Title, URL } from './properties2';
 
-export interface NotionDb
-  extends Database<InsertData, SearchResultProperties, NotionDatabaseSignature> {}
+export interface NotionDb extends Database<DbPropertiesInsert, SearchResultProperty, NotionDB> {}
 
 export class NotionDatabase implements NotionDb {
   readonly #notion: Client;
@@ -34,89 +36,61 @@ export class NotionDatabase implements NotionDb {
     this.#databaseID = databaseID;
   }
 
-  async getDatabaseInfo(): Promise<DatabaseInfo<Error, NotionDatabaseSignature>> {
+  async getDatabaseInfo(): Promise<DatabaseInfo<DatabaseError, NotionDB>> {
     try {
       const response = await this.#notion.databases.retrieve({ database_id: this.#databaseID });
-      return right(response as unknown as NotionDatabaseSignature);
-    } catch (error) {
-      return left(error);
+      return right(response as NotionDB);
+    } catch ({ code = 400, message }) {
+      return left(new DatabaseGetInfoError({ code, message }));
     }
   }
 
-  async insert(data: InsertData): Promise<InsertResult> {
+  async insert(properties: DbPropertiesInsert): Promise<InsertResult> {
     try {
-      const {
-        name,
-        platform,
-        repoURL,
-        tags,
-        summary,
-        status,
-        score,
-        npmDownloads: downloads,
-        stars,
-        review,
-      } = data;
-
-      const Score = score
-        ? new Select({
-            name: 'Score /5',
-            selectedOption: { name: score },
-          }).toColumn()
-        : {};
-
-      const Review = review ? new RichText({ name: 'Review', text: review }).toColumn() : {};
-
       await this.#notion.pages.create({
         parent: { database_id: this.#databaseID },
-        properties: {
-          ...new Title({ name: 'Name', title: name }).toColumn(),
-          ...new Select({ name: 'Platform', selectedOption: { name: platform } }).toColumn(),
-          ...new URL({ name: 'Repo link', url: repoURL }).toColumn(),
-          ...new Number({ name: 'NPM weekly downloads', number: downloads }).toColumn(),
-          ...new Number({ name: 'github stars', number: stars }).toColumn(),
-          ...new MultiSelect({
-            name: 'Tags',
-            selectedOptions: tags.map((tag) => ({ name: tag })),
-          }).toColumn(),
-          ...new RichText({ name: 'Summary', text: summary }).toColumn(),
-          ...new Select({ name: 'Status', selectedOption: { name: status } }).toColumn(),
-          ...Score,
-          ...Review,
-        },
+        properties,
       });
 
       return right(undefined);
-    } catch (error) {
-      return left(error);
+    } catch ({ code = 400, message }) {
+      return left(new DatabaseInsertError({ code, message }));
     }
   }
 
-  async findByQuery(
-    query: string,
-  ): Promise<QueryResult<RequestError | FindByQueryError, SearchResultProperties>> {
+  async findByQuery(query: string): Promise<QueryResult<DatabaseError, SearchResultProperty>> {
     try {
       const response = await this.#notion.search({ query });
 
       if (!response.results.length) {
-        throw new FindByQueryError(query);
+        throw new DatabaseFindByQueryError({ code: 404, query, message: '' });
       }
 
       const result = (response.results as SearchResponsePageResultProperties[]).map(
-        ({ id, properties: data }) => ({ id, data }),
+        ({ id, properties }) => {
+          const data = Object.entries(properties).map(([name, value]) => ({ ...value, name }));
+
+          return { id, data };
+        },
       );
 
-      // @ts-expect-error Всё нормально
+      // @ts-expect-error Бд выдаёт нужные свойства
       return right(result);
     } catch (error) {
-      return left(error);
+      if (error instanceof DatabaseFindByQueryError) {
+        return left(error);
+      }
+
+      const { code = 400, message } = error;
+
+      return left(new DatabaseFindByQueryError({ code, message, query }));
     }
   }
 
   async findByFilters({
     filters,
     sorts,
-  }: FiltersConfig): Promise<FiltersResult<FiltersError, SearchResultProperties>> {
+  }: FiltersConfig): Promise<SearchByFiltersResult<DatabaseError, SearchResultProperty>> {
     try {
       const response = await this.#notion.databases.query({
         database_id: this.#databaseID,
@@ -125,21 +99,27 @@ export class NotionDatabase implements NotionDb {
       });
 
       if (!response.results.length) {
-        throw new FindByFiltersError('Ничего не найдено!');
+        throw new DatabaseFindByFiltersError({ code: 404, message: '' });
       }
 
       const result = (response.results as SearchResponsePageResultProperties[]).map(
-        ({ id, properties: data }) => ({ id, data }),
+        ({ id, properties }) => {
+          const data = Object.entries(properties).map(([name, value]) => ({ ...value, name }));
+
+          return { id, data };
+        },
       );
 
-      // @ts-expect-error Всё нормально
+      // @ts-expect-error Бд выдаёт нужные свойства
       return right(result);
     } catch (error) {
-      if (error instanceof FindByFiltersError) {
+      if (error instanceof DatabaseFindByFiltersError) {
         return left(error);
       }
 
-      return left(new FindByFiltersError(error.message));
+      const { code = 400, message } = error;
+
+      return left(new DatabaseFindByFiltersError({ code, message }));
     }
   }
 }

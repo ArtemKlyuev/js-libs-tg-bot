@@ -1,6 +1,6 @@
 import { NPMRegistry } from 'common/services';
 
-import { Github } from '@services';
+import { Github } from '@services/Github';
 import { DatabaseRepository } from '@repository';
 
 export interface Dependencies {

@@ -1,33 +1,48 @@
+type Value = string[] | string | number | null;
+
 interface PropertyInfo {
-  id: string | number;
-  type: string;
-  name: string;
-  value: string | number | boolean | null;
+  readonly id: string | number;
+  readonly type: string;
+  readonly name: string;
+  readonly value: Value;
 }
 
-interface PropertyA extends PropertyInfo {
-  isomorphicName: string;
-  setValue: (value: string | number | boolean | null) => void;
+interface PropertyHandlers {
+  setValue: (value: Value) => void;
 }
 
-export class Property implements PropertyA {
+export type DbProperty = PropertyInfo & PropertyHandlers;
+
+export class Property implements DbProperty {
   readonly #id: string | number;
   readonly #type: string;
   readonly #name: string;
-  readonly #isomorphicName: string;
-  #value: string | number | boolean | null;
+  #value: Value;
 
-  constructor(data: PropertyInfo) {
-    for (const key in data) {
-      const typedKey = key as keyof PropertyInfo;
-      // @ts-expect-error
-      this['#' + typedKey] = data[typedKey];
-    }
-
-    this.#isomorphicName = this.#name.toLowerCase();
+  constructor({ id, name, type, value }: PropertyInfo) {
+    this.#id = id;
+    this.#name = name;
+    this.#type = type;
+    this.#value = value;
   }
 
-  setValue(value: string | number | boolean | null): void {
+  setValue(value: Value): void {
     this.#value = value;
+  }
+
+  get id(): string | number {
+    return this.#id;
+  }
+
+  get type(): string {
+    return this.#type;
+  }
+
+  get name(): string {
+    return this.#name;
+  }
+
+  get value(): Value {
+    return this.#value;
   }
 }

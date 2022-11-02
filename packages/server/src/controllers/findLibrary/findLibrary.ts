@@ -1,4 +1,4 @@
-import { DatabaseRepository, SearchLibraryResult } from '../../repository';
+import { DatabaseRepository, SearchLibraryResult } from '@repository';
 
 export const findLibrary = async (
   name: string,

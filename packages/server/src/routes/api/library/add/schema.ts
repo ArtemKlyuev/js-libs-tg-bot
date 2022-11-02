@@ -4,17 +4,10 @@ import { ToTS, JSONSchema } from '@utils';
 
 const definedBodySchema = JSONSchema.defineSchema.object({
   name: JSONSchema.defineSchema.string().min(1),
-  platform: JSONSchema.defineSchema.enum(['frontend', 'backend', 'isomorphic']),
+  platform: JSONSchema.defineSchema.string().min(1),
   tags: JSONSchema.defineSchema.string().array().nonempty(),
-  status: JSONSchema.defineSchema.enum([
-    'Backlog',
-    'to do',
-    'in progress',
-    'waiting',
-    'rejected',
-    'done',
-  ]),
-  score: JSONSchema.defineSchema.enum(['1', '2', '3', '4', '5']).optional(),
+  status: JSONSchema.defineSchema.string().min(1),
+  score: JSONSchema.defineSchema.string().min(1).optional(),
   review: JSONSchema.defineSchema.string().min(1).optional(),
 });
 
