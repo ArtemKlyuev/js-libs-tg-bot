@@ -27,6 +27,7 @@
     "paths": {
       "@config": ["./src/config.ts"],
       "@services": ["./src/services/index.ts"],
+      "@services/*": ["./src/services/*"],
       "@repository": ["./src/repository/index.ts"],
       "@controllers": ["./src/controllers/index.ts"],
       "@utils": ["./src/utils/index.ts"]
