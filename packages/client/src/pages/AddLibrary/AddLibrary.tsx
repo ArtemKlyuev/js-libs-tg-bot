@@ -27,7 +27,7 @@ export const AddLibrary = () => {
 
   return (
     <form className="grid gap-[20px]">
-      <div className="form-control w-full max-w-xs">
+      <div className="form-control w-full">
         <InputLabel label="Название библиотеки" />
         <Input value={value} onChange={handleLibraryNameChange} />
       </div>
