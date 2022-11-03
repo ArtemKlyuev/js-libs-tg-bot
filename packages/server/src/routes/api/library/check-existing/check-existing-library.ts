@@ -35,8 +35,8 @@ export const checkExistingLibraryRoute: FastifyPluginAsync = async (app) => {
         .mapRight(() => {
           reply.status(200).send({ error: null, exist: true });
         })
-        .mapLeft(({ message }) => {
-          reply.status(400).send({ error: message, exist: false });
+        .mapLeft(({ message, code }) => {
+          reply.status(code).send({ error: message, exist: false });
         });
     },
   );
