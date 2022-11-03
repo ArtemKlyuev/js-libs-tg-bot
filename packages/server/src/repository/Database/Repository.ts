@@ -1,21 +1,6 @@
 import { Either } from '@sweet-monads/either';
 
-import { DbProperty } from '@services/Database';
 import { DbProperty as DbPropertyModel } from '../../models';
-
-// TODO: избавиться от `null` у `summary`, `repoURL`, `npmDownloads`, `githubStars`, `status`
-export interface LegacyLibraryData {
-  name: string;
-  platform: string;
-  tags: string[];
-  summary: string | null;
-  repoURL: string | null;
-  npmDownloads: number | null;
-  githubStars: number | null;
-  status: string | null;
-  score: string | null;
-  review: string | null;
-}
 
 interface SearchedLibraryData {
   id: string;
@@ -34,9 +19,16 @@ interface InsertedProperty<Value = string[] | string | number | null> {
   value: Value;
 }
 
+interface DbProperty {
+  id: string;
+  name: string;
+  type: string;
+  value: [{ id: string; name: string }, ...{ id: string; name: string }[]] | null;
+}
+
 export type SearchResult = Either<ErrorWithCode, SearchedLibraryData[][]>;
 export type SearchLibraryResult = Either<ErrorWithCode, SearchedLibraryData[]>;
-export type SearchByFiltersResult = Either<ErrorWithCode, LegacyLibraryData[]>;
+export type SearchByFiltersResult = Either<ErrorWithCode, SearchedLibraryData[]>;
 export type PropertiesResult = Either<ErrorWithCode, DbProperty[]>;
 export type AddResult = Either<ErrorWithCode, void>;
 
