@@ -27,7 +27,7 @@ export class AxiosHttpRequest implements HttpRequest {
     return { response, cancel: (reason?: string) => onCancel(reason) };
   }
 
-  async get<Data>(url: string, options?: GETRequestOptions | undefined): Promise<Request<Data>> {
+  get<Data>(url: string, options?: GETRequestOptions | undefined): Request<Data> {
     const controller = new AbortController();
 
     const response = this.#axios
@@ -40,11 +40,7 @@ export class AxiosHttpRequest implements HttpRequest {
     return this.#createRequest(response, controller.abort);
   }
 
-  async post<Data>(
-    url: string,
-    data: Data,
-    options?: POSTRequestOptions | undefined,
-  ): Promise<Request<Data>> {
+  post<Data>(url: string, data: Data, options?: POSTRequestOptions | undefined): Request<Data> {
     const controller = new AbortController();
 
     const response = this.#axios
@@ -57,11 +53,7 @@ export class AxiosHttpRequest implements HttpRequest {
     return this.#createRequest(response, controller.abort);
   }
 
-  async put<Data>(
-    url: string,
-    data: Data,
-    options?: POSTRequestOptions | undefined,
-  ): Promise<Request<Data>> {
+  put<Data>(url: string, data: Data, options?: POSTRequestOptions | undefined): Request<Data> {
     const controller = new AbortController();
 
     const response = this.#axios

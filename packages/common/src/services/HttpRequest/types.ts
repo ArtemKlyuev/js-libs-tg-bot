@@ -27,15 +27,7 @@ export interface POSTRequestOptions
 }
 
 export interface HttpRequest {
-  get<Data>(url: string, options?: GETRequestOptions | undefined): Promise<Request<Data>>;
-  post<Data>(
-    url: string,
-    data: Data,
-    options?: POSTRequestOptions | undefined,
-  ): Promise<Request<Data>>;
-  put<Data>(
-    url: string,
-    data: Data,
-    options?: POSTRequestOptions | undefined,
-  ): Promise<Request<Data>>;
+  get<Data>(url: string, options?: GETRequestOptions | undefined): Request<Data>;
+  post<Data>(url: string, data: Data, options?: POSTRequestOptions | undefined): Request<Data>;
+  put<Data>(url: string, data: Data, options?: POSTRequestOptions | undefined): Request<Data>;
 }
