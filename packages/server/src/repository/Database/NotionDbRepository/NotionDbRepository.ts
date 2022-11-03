@@ -50,6 +50,16 @@ const propertyMap2: Record<PropertyType, (value: any) => any> = {
   url: (value: string | null) => value,
 };
 
+const propertyMap3: Record<PropertyType, (value: any) => any> = {
+  multi_select: ({ options }: { options: Option[] }) =>
+    options.map(({ id, name }) => ({ id, name })),
+  number: (value: {}) => null,
+  rich_text: (value: {}) => null,
+  select: ({ options }: { options: Option[] }) => options.map(({ id, name }) => ({ id, name })),
+  title: (value: {}) => null,
+  url: (value: {}) => null,
+};
+
 class NotFoundByNameError extends Error {
   readonly code: number;
   readonly name: string;
@@ -82,7 +92,14 @@ export class NotionDbRepository implements DatabaseRepository {
   async getProperties(): Promise<PropertiesResult> {
     const response = await this.#db.getDatabaseInfo();
 
-    return response.mapRight((dbInfo) => Object.values(dbInfo.properties));
+    return response
+      .mapRight((dbInfo) => Object.values(dbInfo.properties))
+      .mapRight((properties) => {
+        return properties.map(({ id, name, type, ...rest }) => {
+          const [_, value] = Object.entries(rest)[0];
+          return { id, name, type, value: propertyMap3[type](value) };
+        });
+      });
   }
 
   async addLibrary(properties: DbPropertyModel[]): Promise<AddResult> {
