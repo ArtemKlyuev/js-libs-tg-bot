@@ -40,14 +40,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: '/library/add',
-  //   element: (
-  //     <Layout title="Добавление библиотеки">
-  //       <AddLibrary />
-  //     </Layout>
-  //   ),
-  // },
 ]);
 
 ReactDOM.createRoot(root).render(
