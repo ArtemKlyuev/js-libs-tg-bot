@@ -8,7 +8,7 @@ export const useLibraryStatus = () => {
   const NPMRegistry = useNPMRegistry();
 
   const databaseLibraryInfo = useQuery<PackageInfo, PackageNameError | FetchError>(
-    ['databse-library-info', library],
+    ['database-library-info', library],
     async () => {
       const result = await NPMRegistry.getPackageInfo(library);
       return result.unwrap();
@@ -21,7 +21,7 @@ export const useLibraryStatus = () => {
   const packageID = databaseLibraryInfo.data?.id;
 
   const npmLibraryInfo = useQuery<PackageInfo, PackageNameError | FetchError>(
-    ['npm-library', packageID],
+    ['npm-library-info', packageID],
     async () => {
       const result = await NPMRegistry.getPackageInfo(library);
       return result.unwrap();
