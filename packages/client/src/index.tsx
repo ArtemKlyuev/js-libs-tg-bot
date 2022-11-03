@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
 
-import { Error, Root, AddLibrary } from '@pages';
+import { Error, Root, AddLibrary, SearchLibrary } from '@pages';
 import { Layout } from '@components';
 
 import { App } from './App';
@@ -20,13 +20,34 @@ const router = createBrowserRouter([
     errorElement: <Error />,
   },
   {
-    path: '/library/add',
-    element: (
-      <Layout title="Добавление библиотеки">
-        <AddLibrary />
-      </Layout>
-    ),
+    path: '/library',
+    children: [
+      {
+        path: 'add',
+        element: (
+          <Layout title="Добавление библиотеки">
+            <AddLibrary />
+          </Layout>
+        ),
+      },
+      {
+        path: 'search',
+        element: (
+          <Layout title="Поиск библиотеки">
+            <SearchLibrary />
+          </Layout>
+        ),
+      },
+    ],
   },
+  // {
+  //   path: '/library/add',
+  //   element: (
+  //     <Layout title="Добавление библиотеки">
+  //       <AddLibrary />
+  //     </Layout>
+  //   ),
+  // },
 ]);
 
 ReactDOM.createRoot(root).render(
