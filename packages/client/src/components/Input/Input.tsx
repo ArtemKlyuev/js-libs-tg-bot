@@ -8,7 +8,5 @@ interface Props {
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(({ type = 'text', ...props }, ref) => {
-  return (
-    <input ref={ref} type={type} className="input input-bordered w-full max-w-xs" {...props} />
-  );
+  return <input ref={ref} type={type} className="input input-bordered w-full" {...props} />;
 });
