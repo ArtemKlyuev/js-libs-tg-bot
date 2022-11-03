@@ -10,9 +10,7 @@ export const useLibraryStatus = () => {
   const databaseLibraryInfo = useQuery<PackageInfo, PackageNameError | FetchError>(
     ['databse-library-info', library],
     async () => {
-      console.log('databse query', library);
       const result = await NPMRegistry.getPackageInfo(library);
-      console.log('result', result);
       return result.unwrap();
     },
     { enabled: Boolean(library) },
