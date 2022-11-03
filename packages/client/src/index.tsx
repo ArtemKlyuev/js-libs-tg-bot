@@ -2,9 +2,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
+import { AxiosHttpRequest } from 'common/services';
 
 import { Error, Root, AddLibrary, SearchLibrary } from '@pages';
 import { Layout } from '@components';
+import { ServicesProvider } from '@hooks';
 
 import { App } from './App';
 
@@ -42,11 +44,17 @@ const router = createBrowserRouter([
   },
 ]);
 
+const services = {
+  httpRequest: new AxiosHttpRequest({ baseURL: 'http://localhost:5173', withCredentials: true }),
+};
+
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       {/* <App /> */}
-      <RouterProvider router={router} />
+      <ServicesProvider value={services}>
+        <RouterProvider router={router} />
+      </ServicesProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 );
