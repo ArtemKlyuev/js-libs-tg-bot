@@ -119,7 +119,8 @@ export class NotionDbRepository implements DatabaseRepository {
       .mapRight((libraries) => {
         const library = libraries.find((library) => {
           const nameData = library.find(({ id }) => id === 'title');
-          return nameData?.name.toLocaleLowerCase() === name;
+          // @ts-expect-error we know that value exist and it's a string
+          return nameData?.value.toLocaleLowerCase() === name;
         });
 
         if (!library) {
