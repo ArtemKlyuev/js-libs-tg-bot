@@ -22,7 +22,7 @@ interface Options {
 
 export const createApp = ({ port }: Options = { port: 3000 }) => {
   // @ts-expect-error
-  const app = fastify({ logger: envToLogger[env] ?? true });
+  const app = fastify({ logger: envToLogger[env] ?? true, ignoreTrailingSlash: true });
 
   const start = async () => {
     try {
