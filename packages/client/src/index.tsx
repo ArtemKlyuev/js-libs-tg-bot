@@ -13,7 +13,9 @@ import { App } from './App';
 import './index.scss';
 
 const root = document.getElementById('root')!;
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } },
+});
 
 const router = createBrowserRouter([
   {
@@ -45,7 +47,10 @@ const router = createBrowserRouter([
 ]);
 
 const services = {
-  httpRequest: new AxiosHttpRequest({ baseURL: 'http://localhost:5173', withCredentials: true }),
+  httpRequest: new AxiosHttpRequest({
+    baseURL: 'http://localhost:3000/api',
+    withCredentials: true,
+  }),
 };
 
 ReactDOM.createRoot(root).render(
