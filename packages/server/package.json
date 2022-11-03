@@ -4,6 +4,13 @@
   "license": "MIT",
   "private": "true",
   "type": "module",
+  "typesVersions": {
+    "*": {
+      "types": [
+        "src/routes/types.ts"
+      ]
+    }
+  },
   "scripts": {
     "postinstall": "patch-package",
     "typecheck": "tsc --noEmit --pretty",
