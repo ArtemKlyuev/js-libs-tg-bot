@@ -3,6 +3,7 @@ export * from './Button';
 export * from './Checkbox';
 export * from './CircleButton';
 export * from './Fieldset';
+export * from './Form';
 export * from './Input';
 export * from './InputLabel';
 export * from './Layout';
