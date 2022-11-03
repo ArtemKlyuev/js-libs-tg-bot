@@ -56,4 +56,21 @@ export class AxiosHttpRequest implements HttpRequest {
 
     return this.#createRequest(response, controller.abort);
   }
+
+  async put<Data>(
+    url: string,
+    data: Data,
+    options?: POSTRequestOptions | undefined,
+  ): Promise<Request<Data>> {
+    const controller = new AbortController();
+
+    const response = this.#axios
+      .put<Data>(url, data, {
+        ...options,
+        signal: controller.signal,
+      })
+      .then(({ data, status }) => ({ data, status }));
+
+    return this.#createRequest(response, controller.abort);
+  }
 }

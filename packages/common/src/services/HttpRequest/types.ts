@@ -33,4 +33,9 @@ export interface HttpRequest {
     data: Data,
     options?: POSTRequestOptions | undefined,
   ): Promise<Request<Data>>;
+  put<Data>(
+    url: string,
+    data: Data,
+    options?: POSTRequestOptions | undefined,
+  ): Promise<Request<Data>>;
 }
