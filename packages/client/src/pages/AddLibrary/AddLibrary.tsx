@@ -16,7 +16,6 @@ export const AddLibrary = () => {
 
   const { value, setValue } = useDebouncedInput({
     onSearch: (value) => {
-      console.log('value changed:', value);
       setLibrary(value);
     },
     wait: 1000,
