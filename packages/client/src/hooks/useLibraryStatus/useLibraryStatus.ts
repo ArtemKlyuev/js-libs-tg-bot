@@ -1,27 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import { CheckExistingResponse } from '@services';
+
 import { PackageInfo, PackageNameError, FetchError, useNPMRegistry } from '../useNPMRegistry';
 import { useServices } from '../useServices';
 
-interface ExistPackage {
-  error: string | null;
-  exist: boolean;
-}
-
 export const useLibraryStatus = () => {
-  const { httpRequest } = useServices();
+  const { libraryService } = useServices();
   const [library, setLibrary] = useState('');
   const NPMRegistry = useNPMRegistry();
 
-  const checkExistingLibraryInDb = useQuery<ExistPackage, PackageNameError | FetchError>(
+  const checkExistingLibraryInDb = useQuery<CheckExistingResponse, PackageNameError | FetchError>(
     ['database-library-info', library],
     async () => {
-      const { response } = httpRequest.get<ExistPackage>('/library/check-existing', {
-        params: { name: library },
-      });
-      const result = await response;
-      return result.data;
+      const { data } = await libraryService.checkExisting(library).response;
+      return data;
     },
     { enabled: Boolean(library) },
   );
