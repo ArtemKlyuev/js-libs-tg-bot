@@ -1,17 +1,20 @@
 import { HttpRequest, Request } from 'common/services';
 import {
   AddLibraryBody,
-  CheckExistingLibraryReply,
+  CheckExistingSuccessResponse,
+  CheckExistingErrorResponse,
   GetPropertiesSuccessReply,
   GetPropertiesErrorReply,
 } from 'server/types';
 
 export type LibraryInfo = AddLibraryBody;
+export type CheckExistingResponse = CheckExistingSuccessResponse | CheckExistingErrorResponse;
+export type GetPropertiesResponse = GetPropertiesSuccessReply | GetPropertiesErrorReply;
 
 export interface Library {
   add: (library: LibraryInfo) => Request<LibraryInfo>;
-  checkExisting: (name: string) => Request<CheckExistingLibraryReply>;
-  getProperties: () => Request<GetPropertiesSuccessReply | GetPropertiesErrorReply>;
+  checkExisting: (name: string) => Request<CheckExistingResponse>;
+  getProperties: () => Request<GetPropertiesResponse>;
 }
 
 export class LibraryService implements Library {
@@ -21,18 +24,16 @@ export class LibraryService implements Library {
     this.#httpRequest = httpRequest;
   }
 
-  getProperties(): Request<GetPropertiesSuccessReply | GetPropertiesErrorReply> {
-    return this.#httpRequest.get<GetPropertiesSuccessReply | GetPropertiesErrorReply>(
-      '/get-properties',
-    );
+  getProperties(): Request<GetPropertiesResponse> {
+    return this.#httpRequest.get<GetPropertiesResponse>('/get-properties');
   }
 
   add(library: LibraryInfo): Request<LibraryInfo> {
     return this.#httpRequest.put<AddLibraryBody>('/library/add', library);
   }
 
-  checkExisting(name: string): Request<CheckExistingLibraryReply> {
-    return this.#httpRequest.get<CheckExistingLibraryReply>('/library/check-existing', {
+  checkExisting(name: string): Request<CheckExistingResponse> {
+    return this.#httpRequest.get<CheckExistingResponse>('/library/check-existing', {
       params: { name },
     });
   }
