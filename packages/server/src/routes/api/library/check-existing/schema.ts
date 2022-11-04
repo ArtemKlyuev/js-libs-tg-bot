@@ -1,9 +1,9 @@
-import { Static, Type } from '@sinclair/typebox';
-import { JSONSchema, ToTS } from '@utils';
 import { FastifySchema } from 'fastify';
 
-const queryStringSchema = Type.Object({
-  name: Type.String(),
+import { JSONSchema, ToTS } from '@utils';
+
+const queryStringSchema = JSONSchema.defineSchema.object({
+  name: JSONSchema.defineSchema.string().min(1),
 });
 
 const successSchema = {
@@ -26,12 +26,15 @@ const responseSchema = JSONSchema.defineSchema.object({
 });
 
 export const schema: FastifySchema = {
-  querystring: queryStringSchema,
-  response: { 200: successResponseSchema, 404: errorResponseSchema },
+  querystring: JSONSchema.toJSONSchema(queryStringSchema),
+  response: {
+    200: JSONSchema.toJSONSchema(successResponseSchema),
+    404: JSONSchema.toJSONSchema(errorResponseSchema),
+  },
 };
 
 export type SuccessResponse = ToTS<typeof successResponseSchema>;
 export type ErrorResponse = ToTS<typeof errorResponseSchema>;
 
-export type Querystring = Static<typeof queryStringSchema>;
+export type Querystring = ToTS<typeof queryStringSchema>;
 export type Reply = ToTS<typeof responseSchema>;
