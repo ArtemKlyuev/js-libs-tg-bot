@@ -7,6 +7,7 @@ import { AxiosHttpRequest } from 'common/services';
 import { Error, Root, AddLibrary, SearchLibrary } from '@pages';
 import { Layout } from '@components';
 import { ServicesProvider } from '@hooks';
+import { LibraryService } from '@services';
 
 import { App } from './App';
 
@@ -46,11 +47,16 @@ const router = createBrowserRouter([
   },
 ]);
 
+const httpRequest = new AxiosHttpRequest({
+  baseURL: 'http://localhost:3000/api',
+  withCredentials: true,
+});
+
+const libraryService = new LibraryService(httpRequest);
+
 const services = {
-  httpRequest: new AxiosHttpRequest({
-    baseURL: 'http://localhost:3000/api',
-    withCredentials: true,
-  }),
+  httpRequest,
+  libraryService,
 };
 
 ReactDOM.createRoot(root).render(
