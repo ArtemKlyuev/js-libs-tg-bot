@@ -24,6 +24,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
+    "composite": true,
     "paths": {
       "@config": ["./src/config.ts"],
       "@services": ["./src/services/index.ts"],
