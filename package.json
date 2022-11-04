@@ -9,7 +9,7 @@
   "scripts": {
     "postinstall": "patch-package",
     "add:root": "yarn add -W -D -E",
-    "dev:server:client": "yarn lerna run dev --scope='{server,client}'",
+    "dev:server:client": "yarn lerna run dev --scope='{server,client}' --parallel",
     "package:client": "yarn workspace client",
     "package:common": "yarn workspace common",
     "package:server": "yarn workspace server"
