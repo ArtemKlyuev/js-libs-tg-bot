@@ -1,3 +1,4 @@
+export * from './AbsoluteCenter';
 export * from './Alert';
 export * from './Button';
 export * from './Checkbox';
