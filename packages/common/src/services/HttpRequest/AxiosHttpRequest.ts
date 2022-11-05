@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 
 import {
   Request,
@@ -6,6 +6,7 @@ import {
   POSTRequestOptions,
   HttpRequest,
   SuccessResponse,
+  HttpRequestError,
 } from './types';
 
 export interface AxiosHttpRequestOptions {
@@ -16,11 +17,37 @@ export interface AxiosHttpRequestOptions {
 
 type Cancel = (reason?: string) => void;
 
+class AxiosHttpRequestError<Data> extends Error implements HttpRequestError<Data> {
+  readonly responseData: Data | null;
+  readonly code: number | null;
+  readonly response: AxiosError<Data>['response'];
+
+  constructor(error: AxiosError<Data>) {
+    super(error.message);
+
+    this.name = 'HttpRequestError';
+    this.code = error.response?.status ?? null;
+    this.responseData = error.response?.data ?? null;
+    this.response = error.response;
+  }
+}
+
 export class AxiosHttpRequest implements HttpRequest {
   readonly #axios: AxiosInstance;
 
   constructor(options?: AxiosHttpRequestOptions) {
     this.#axios = axios.create(options);
+    this.#axios.interceptors.response.use(
+      (response) => response,
+      (err) => {
+        const error = this.#createError(err);
+        throw error;
+      },
+    );
+  }
+
+  #createError<Data>(error: AxiosError<Data>): HttpRequestError<Data> {
+    return new AxiosHttpRequestError(error);
   }
 
   #createRequest<Data>(response: Promise<SuccessResponse<Data>>, onCancel: Cancel): Request<Data> {

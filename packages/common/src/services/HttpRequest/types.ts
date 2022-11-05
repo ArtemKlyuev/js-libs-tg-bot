@@ -1,4 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
+import { ErrorWithCode } from '../../types';
 
 export interface SuccessResponse<Data> {
   status: number;
@@ -24,6 +25,10 @@ export interface POSTRequestOptions
     'url' | 'method' | 'baseURL' | 'params' | 'data' | 'cancelToken' | 'signal'
   > {
   params?: Record<string, string | number>;
+}
+
+export interface HttpRequestError<Data> extends ErrorWithCode {
+  readonly responseData: Data | null;
 }
 
 export interface HttpRequest {
