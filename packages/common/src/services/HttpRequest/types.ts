@@ -27,7 +27,7 @@ export interface POSTRequestOptions
   params?: Record<string, string | number>;
 }
 
-export interface HttpRequestError<Data> extends ErrorWithCode {
+export interface HttpRequestError<Data = any> extends ErrorWithCode {
   readonly responseData: Data | null;
 }
 
