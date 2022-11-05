@@ -3,6 +3,7 @@ export * from './Alert';
 export * from './Button';
 export * from './Checkbox';
 export * from './CircleButton';
+export * from './ErrorMessage';
 export * from './Fieldset';
 export * from './Form';
 export * from './Input';
