@@ -10,7 +10,9 @@ const successResponseSchema = {
     .object({
       id: nonEmptyString,
       name: nonEmptyString,
-      type: nonEmptyString,
+      type: JSONSchema.defineSchema.enum(['text', 'multiline_text', 'select', 'multi_select']),
+      label: nonEmptyString,
+      required: JSONSchema.defineSchema.boolean(),
       value: JSONSchema.defineSchema
         .object({
           id: nonEmptyString,
