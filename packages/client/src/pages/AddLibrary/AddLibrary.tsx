@@ -1,7 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+import { HttpRequestError } from 'common/services';
+import { GetPropertiesSuccessReply, GetPropertiesErrorReply } from 'server/types';
+
 import {
+  AbsoluteCenter,
   Alert,
   Button,
   Checkbox,
+  ErrorMessage,
   Fieldset,
   Input,
   InputLabel,
@@ -9,9 +15,19 @@ import {
   Spinner,
   Textarea,
 } from '@components';
-import { useDebouncedInput, useLibraryStatus } from '@hooks';
+import { useDebouncedInput, useLibraryStatus, useServices } from '@hooks';
 
 export const AddLibrary = () => {
+  const { libraryService } = useServices();
+
+  const libraryPropertiesQuery = useQuery<
+    GetPropertiesSuccessReply,
+    HttpRequestError<GetPropertiesErrorReply>
+  >(['library-properties'], async () => {
+    const { data } = await libraryService.getProperties().response;
+    return data as GetPropertiesSuccessReply;
+  });
+
   const { setLibrary } = useLibraryStatus();
 
   const { value, setValue } = useDebouncedInput({
@@ -20,6 +36,25 @@ export const AddLibrary = () => {
     },
     wait: 1000,
   });
+
+  if (libraryPropertiesQuery.isLoading) {
+    return (
+      <AbsoluteCenter>
+        <Spinner />
+      </AbsoluteCenter>
+    );
+  }
+
+  if (libraryPropertiesQuery.isError) {
+    const { message, responseData } = libraryPropertiesQuery.error;
+    const onRetry = () => libraryPropertiesQuery.refetch();
+
+    return (
+      <AbsoluteCenter>
+        <ErrorMessage message={message} messageFromServer={responseData?.error} onRetry={onRetry} />
+      </AbsoluteCenter>
+    );
+  }
 
   const handleLibraryNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setValue(event.target.value);
@@ -56,7 +91,6 @@ export const AddLibrary = () => {
         Добавить
       </Button>
       <Alert type="success" message="Your purchase has been confirmed!" />
-      <Spinner />
     </form>
   );
 };
