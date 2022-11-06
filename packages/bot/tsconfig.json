@@ -22,13 +22,6 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@config": ["./src/config.ts"],
-      "@services": ["./src/services/index.ts"],
-      "@repository": ["./src/repository/index.ts"],
-      "@controllers": ["./src/controllers/index.ts"],
-      "@utils": ["./src/utils/index.ts"]
-    }
+    "forceConsistentCasingInFileNames": true
   }
 }
