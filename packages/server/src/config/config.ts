@@ -1,7 +1,11 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-
-const envs: EnvVaribales[] = ['NODE_ENV', 'NOTION_DATABASE_ID', 'NOTION_TOKEN'];
+const envs: EnvVaribales[] = [
+  'NODE_ENV',
+  'HOST',
+  'PORT',
+  'ALLOWED_ORIGINS',
+  'NOTION_DATABASE_ID',
+  'NOTION_TOKEN',
+];
 
 export interface ParsedEnvVariables extends Omit<Env, 'TELEGRAM_VALID_USER_ID'> {
   TELEGRAM_VALID_USER_ID: number;
@@ -10,9 +14,8 @@ export interface ParsedEnvVariables extends Omit<Env, 'TELEGRAM_VALID_USER_ID'> 
 const isDev = process.env.NODE_ENV !== 'production';
 
 if (isDev) {
-  const path = require('path');
-
-  require('dotenv').config({ path: path.resolve(process.cwd(), '.env.local') });
+  const { loadDevEnvFiles } = await import('./loadDevEnvFiles');
+  loadDevEnvFiles();
 }
 
 export class Config {
@@ -26,7 +29,15 @@ export class Config {
     return env;
   }
 
-  static #processEnvVariableValue(name: EnvVaribales, value: string): string | number {
+  static #processEnvVariableValue(name: EnvVaribales, value: string): string | string[] | number {
+    if (name === 'PORT') {
+      return Number(value);
+    }
+
+    if (name === 'ALLOWED_ORIGINS') {
+      return value.split(',');
+    }
+
     return value;
   }
 
