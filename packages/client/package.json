@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit --pretty",
     "dev": "vite",
     "dev:expose-local": "vite --host",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
