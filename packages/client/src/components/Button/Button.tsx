@@ -6,7 +6,7 @@ interface Props {
   type?: 'button' | 'submit';
   loading?: boolean;
   disabled?: boolean;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const Button = forwardRef<HTMLButtonElement, Props>(

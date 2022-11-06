@@ -1,9 +1,9 @@
 import { ChangeEvent, forwardRef } from 'react';
 
 interface Props {
-  checked: boolean;
-  value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  checked?: boolean;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   id?: string;
   name?: string;
   label?: string;
