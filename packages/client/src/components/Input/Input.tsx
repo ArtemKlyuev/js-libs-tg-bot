@@ -2,8 +2,8 @@ import { ChangeEvent, forwardRef } from 'react';
 
 interface Props {
   type?: 'text' | 'search';
-  value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
 }
 
