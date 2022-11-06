@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AxiosHttpRequest } from 'common/services';
 
-import { Error, Root } from '@pages';
+import { Error } from '@pages';
 import { Layout } from '@components';
 import { ServicesProvider } from '@hooks';
 import { LibraryService } from '@services';
@@ -31,7 +31,7 @@ const queryClient = new QueryClient({
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Root />,
+    element: <Layout title="Root" />,
     errorElement: <Error />,
   },
   {
