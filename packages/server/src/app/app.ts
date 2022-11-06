@@ -1,5 +1,12 @@
 import fastify from 'fastify';
 
+import { Config } from '@config';
+
+interface Options {
+  host?: string;
+  port?: number | undefined;
+}
+
 const envToLogger = {
   development: {
     transport: {
@@ -14,19 +21,19 @@ const envToLogger = {
   test: false,
 };
 
-const env = process.env.NODE_ENV!;
+const DEFAULT_OPTIONS: Options = { host: Config.env.HOST, port: Config.env.PORT };
 
-interface Options {
-  port?: number | undefined;
-}
+export const createApp = (options?: Options) => {
+  const app = fastify({
+    logger: envToLogger[Config.env.NODE_ENV] ?? true,
+    ignoreTrailingSlash: true,
+  });
 
-export const createApp = ({ port }: Options = { port: 3000 }) => {
-  // @ts-expect-error
-  const app = fastify({ logger: envToLogger[env] ?? true, ignoreTrailingSlash: true });
+  const { host, port } = { ...DEFAULT_OPTIONS, ...options };
 
   const start = async () => {
     try {
-      await app.listen({ port });
+      await app.listen({ port, host });
     } catch (err) {
       app.log.error(err);
       process.exit(1);
