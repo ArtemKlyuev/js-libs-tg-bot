@@ -1,10 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React from 'react';
+import React, { lazy } from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AxiosHttpRequest } from 'common/services';
 
-import { Error, Root, AddLibrary, SearchLibrary } from '@pages';
+import { Error, Root } from '@pages';
 import { Layout } from '@components';
 import { ServicesProvider } from '@hooks';
 import { LibraryService } from '@services';
@@ -12,6 +12,16 @@ import { LibraryService } from '@services';
 import { App } from './App';
 
 import './index.scss';
+
+const SearchLibraryPage = lazy(() =>
+  import('./pages/SearchLibrary').then((module) => ({
+    default: module.SearchLibrary,
+  })),
+);
+
+const AddLibraryPage = lazy(() =>
+  import('./pages/AddLibrary').then((module) => ({ default: module.AddLibrary })),
+);
 
 const root = document.getElementById('root')!;
 const queryClient = new QueryClient({
@@ -31,7 +41,7 @@ const router = createBrowserRouter([
         path: 'add',
         element: (
           <Layout title="Добавление библиотеки">
-            <AddLibrary />
+            <AddLibraryPage />
           </Layout>
         ),
       },
@@ -39,7 +49,7 @@ const router = createBrowserRouter([
         path: 'search',
         element: (
           <Layout title="Поиск библиотеки">
-            <SearchLibrary />
+            <SearchLibraryPage />
           </Layout>
         ),
       },
