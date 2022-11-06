@@ -14,6 +14,6 @@ export interface LibraryData {
   platform: string;
   tags: string[];
   status: string;
-  score?: string | undefined;
+  rating?: string | undefined;
   review?: string | undefined;
 }

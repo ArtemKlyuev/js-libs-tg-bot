@@ -7,7 +7,7 @@ const definedBodySchema = JSONSchema.defineSchema.object({
   platform: JSONSchema.defineSchema.string().min(1),
   tags: JSONSchema.defineSchema.string().array().nonempty(),
   status: JSONSchema.defineSchema.string().min(1),
-  score: JSONSchema.defineSchema.string().min(1).optional(),
+  rating: JSONSchema.defineSchema.string().min(1).optional(),
   review: JSONSchema.defineSchema.string().min(1).optional(),
 });
 

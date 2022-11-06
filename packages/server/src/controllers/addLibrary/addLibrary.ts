@@ -41,7 +41,7 @@ export const addLibrary = async (
           repoURL: githubInfo.repoURL,
           status: libraryData.status,
           tags: libraryData.tags,
-          score: libraryData.score ?? '',
+          rating: libraryData.rating,
           review: libraryData.review ?? '',
           npmDownloads,
           stars: githubInfo.stars,

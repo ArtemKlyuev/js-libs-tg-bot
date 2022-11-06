@@ -3,7 +3,6 @@ import { LibraryData } from '../controllers/addLibrary/types';
 import { Property } from '../models';
 
 interface Properties extends LibraryData {
-  score: string;
   review: string;
   repoURL: string;
   stars: number;
@@ -17,7 +16,7 @@ const nameToDbPropertyName: Record<keyof Properties, string> = {
   platform: 'platform',
   repoURL: 'repo link',
   review: 'review',
-  score: 'score /5',
+  rating: 'score /5',
   stars: 'github stars',
   status: 'status',
   summary: 'summary',
