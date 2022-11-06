@@ -15,8 +15,9 @@
     "postinstall": "patch-package",
     "typecheck": "tsc --noEmit --pretty",
     "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
+    "dev:expose-local": "cross-env NODE_ENV=development EXPOSE=true nodemon src/index.ts",
     "start": "node build/index.js",
-    "build": "ts-node scripts/build.ts --swc"
+    "build": "cross-env NODE_ENV=production ts-node scripts/build.ts --swc"
   },
   "dependencies": {
     "@fastify/awilix": "3.0.1",
