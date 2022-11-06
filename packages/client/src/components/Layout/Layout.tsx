@@ -10,7 +10,7 @@ export const Layout = ({ title, children }: Props) => {
 
   return (
     <main className="max-w-[414px] m-auto p-[5px]">
-      <h1 className="text-3xl font-bold underline">{title}</h1>
+      <h1 className="text-3xl font-bold underline text-center">{title}</h1>
       {children}
     </main>
   );
