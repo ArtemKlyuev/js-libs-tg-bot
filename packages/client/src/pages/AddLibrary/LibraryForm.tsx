@@ -1,4 +1,5 @@
 import { Fragment, useMemo } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,7 +17,8 @@ import {
   Radio,
   Textarea,
 } from '@components';
-import { useDebouncedInput, useLibraryStatus } from '@hooks';
+import { useDebouncedInput, useLibraryStatus, useServices } from '@hooks';
+import { LibraryInfo } from '@services';
 
 interface Props {
   properties: GetPropertiesSuccessReply['properties'];
@@ -50,6 +52,8 @@ const typeConfig = {
 };
 
 export const LibraryForm = ({ properties }: Props) => {
+  const { libraryService } = useServices();
+
   const schema = useMemo(() => {
     if (!properties) {
       return z.object({});
@@ -77,6 +81,13 @@ export const LibraryForm = ({ properties }: Props) => {
   });
 
   const { setLibrary, existOnDb, existOnNPM } = useLibraryStatus();
+
+  const libraryMutation = useMutation({
+    mutationFn: async (library: LibraryInfo) => {
+      const { data } = await libraryService.add(library).response;
+      return data;
+    },
+  });
 
   const { value, setValue } = useDebouncedInput({
     onSearch: (value) => {
@@ -114,8 +125,14 @@ export const LibraryForm = ({ properties }: Props) => {
   return (
     <>
       <Form
-        onSubmit={handleSubmit((d) => {
-          console.log('d', d);
+        // onSubmit={handleSubmit((d) => {
+        //   console.log('d', d);
+        // })}
+        onSubmit={handleSubmit((data) => {
+          const a = Object.entries(data).filter(([name, value]) => Boolean(value));
+          const b = Object.fromEntries(a) as LibraryInfo;
+
+          libraryMutation.mutate(b);
         })}
       >
         {properties.map(({ id, name, required, type, ...property }) => {
