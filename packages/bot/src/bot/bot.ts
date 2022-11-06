@@ -6,7 +6,9 @@ import { userPermissionGuard } from './middlewares';
 import { commands } from './commands';
 
 export const startBot = async (): Promise<void> => {
-  const bot = new Telegraf(Config.env.TELEGRAM_BOT_TOKEN);
+  const bot = new Telegraf(Config.env.TELEGRAM_BOT_TOKEN, {
+    telegram: { testEnv: Config.env.NODE_ENV === 'development' },
+  });
 
   bot.use(userPermissionGuard(Config.env.TELEGRAM_VALID_USER_ID));
 
