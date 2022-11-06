@@ -5,12 +5,16 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   plugins: [splitVendorChunkPlugin(), tsconfigPaths(), react()],
   build: {
-    chunkSizeWarningLimit: 200,
+    chunkSizeWarningLimit: 250,
     target: 'esnext',
     polyfillModulePreload: false,
     cssCodeSplit: true,
     rollupOptions: {
-      output: { manualChunks: { common: ['react', 'react-dom/client', '@tanstack/react-query'] } },
+      output: {
+        manualChunks: {
+          common: ['react', 'react-dom/client', 'react-router-dom', '@tanstack/react-query'],
+        },
+      },
     },
   },
 });
