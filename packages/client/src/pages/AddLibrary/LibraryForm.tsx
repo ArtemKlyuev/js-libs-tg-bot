@@ -74,6 +74,7 @@ export const LibraryForm = ({ properties }: Props) => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
@@ -102,7 +103,6 @@ export const LibraryForm = ({ properties }: Props) => {
     existOnDb: boolean | null,
     existOnNPM: boolean | null,
   ): string => {
-    console.log({ existOnDb, existOnNPM, validationErrorMessage });
     if (existOnDb !== null && existOnDb) {
       return `${libraryName} уже есть в базе`;
     }
@@ -125,14 +125,16 @@ export const LibraryForm = ({ properties }: Props) => {
   return (
     <>
       <Form
-        // onSubmit={handleSubmit((d) => {
-        //   console.log('d', d);
-        // })}
         onSubmit={handleSubmit((data) => {
-          const a = Object.entries(data).filter(([name, value]) => Boolean(value));
-          const b = Object.fromEntries(a) as LibraryInfo;
+          const validEntries = Object.entries(data).filter(([name, value]) => Boolean(value));
+          const dataToSend = Object.fromEntries(validEntries) as LibraryInfo;
 
-          libraryMutation.mutate(b);
+          libraryMutation.mutate(dataToSend, {
+            onSuccess: () => {
+              reset();
+              setValue('');
+            },
+          });
         })}
       >
         {properties.map(({ id, name, required, type, ...property }) => {
@@ -181,7 +183,9 @@ export const LibraryForm = ({ properties }: Props) => {
             </Fieldset>
           );
         })}
-        <Button type="submit">Добавить</Button>
+        <Button type="submit" loading={libraryMutation.isLoading}>
+          Добавить
+        </Button>
       </Form>
       {import.meta.env.DEV && <DevTool control={control} />}
     </>
