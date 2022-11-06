@@ -9,5 +9,8 @@ export default defineConfig({
     target: 'esnext',
     polyfillModulePreload: false,
     cssCodeSplit: true,
+    rollupOptions: {
+      output: { manualChunks: { common: ['react', 'react-dom/client', '@tanstack/react-query'] } },
+    },
   },
 });
