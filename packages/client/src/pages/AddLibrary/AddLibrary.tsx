@@ -10,10 +10,16 @@ const LibraryForm = lazy(() =>
   import('./LibraryForm').then((module) => ({ default: module.LibraryForm })),
 );
 
+const centeredSpinner = (
+  <AbsoluteCenter>
+    <Spinner />
+  </AbsoluteCenter>
+);
+
 export const AddLibrary = () => {
   const { libraryService } = useServices();
 
-  const libraryPropertiesQuery = useQuery<
+  const { isLoading, isError, error, data, refetch } = useQuery<
     GetPropertiesSuccessReply,
     HttpRequestError<GetPropertiesErrorReply>
   >(['library-properties'], async () => {
@@ -21,28 +27,23 @@ export const AddLibrary = () => {
     return data as GetPropertiesSuccessReply;
   });
 
-  if (libraryPropertiesQuery.isLoading) {
-    return (
-      <AbsoluteCenter>
-        <Spinner />
-      </AbsoluteCenter>
-    );
+  if (isLoading) {
+    return centeredSpinner;
   }
 
-  if (libraryPropertiesQuery.isError) {
-    const { message, responseData } = libraryPropertiesQuery.error;
-    const onRetry = () => libraryPropertiesQuery.refetch();
+  if (isError) {
+    const { message, responseData } = error;
 
     return (
       <AbsoluteCenter>
-        <ErrorMessage message={message} messageFromServer={responseData?.error} onRetry={onRetry} />
+        <ErrorMessage message={message} messageFromServer={responseData?.error} onRetry={refetch} />
       </AbsoluteCenter>
     );
   }
 
   return (
-    <Suspense fallback={<Spinner />}>
-      <LibraryForm properties={libraryPropertiesQuery.data.properties} />
+    <Suspense fallback={centeredSpinner}>
+      <LibraryForm properties={data.properties} />
     </Suspense>
   );
 };
