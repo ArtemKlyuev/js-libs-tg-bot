@@ -31,7 +31,9 @@ export const useLibraryStatus = () => {
 
   return {
     setLibrary,
-    existOnDb: checkExistingLibraryInDb.isFetched ? !checkExistingLibraryInDb.isError : null,
-    existOnNPM: npmLibraryInfo.isFetched ? !npmLibraryInfo.isError : null,
+    existOnDb: checkExistingLibraryInDb.isFetched
+      ? Boolean(checkExistingLibraryInDb.data?.exist)
+      : null,
+    existOnNPM: npmLibraryInfo.isFetched ? Boolean(npmLibraryInfo.data?.id) : null,
   };
 };
