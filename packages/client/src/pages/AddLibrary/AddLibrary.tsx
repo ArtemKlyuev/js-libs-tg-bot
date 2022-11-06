@@ -1,14 +1,20 @@
+import { Fragment, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { HttpRequestError } from 'common/services';
 import { GetPropertiesSuccessReply, GetPropertiesErrorReply } from 'server/types';
 
 import {
   AbsoluteCenter,
-  Alert,
   Button,
   Checkbox,
   ErrorMessage,
+  FieldError,
   Fieldset,
+  Form,
   Input,
   InputLabel,
   Radio,
@@ -16,6 +22,33 @@ import {
   Textarea,
 } from '@components';
 import { useDebouncedInput, useLibraryStatus, useServices } from '@hooks';
+
+interface ValidationOptions {
+  required: boolean;
+}
+
+const stringValidation = (options: ValidationOptions) => {
+  if (options.required) {
+    return z.string().trim().min(1, { message: 'Required' });
+  }
+
+  return z.string().trim().or(z.null());
+};
+
+const arrayValidation = (options: ValidationOptions) => {
+  if (options.required) {
+    return z.string().trim().array().nonempty({ message: 'Required' });
+  }
+
+  return z.string().trim().array().or(z.null());
+};
+
+const typeConfig = {
+  text: { Element: Input, validation: stringValidation },
+  multiline_text: { Element: Textarea, validation: stringValidation },
+  select: { Element: Radio, validation: stringValidation },
+  multi_select: { Element: Checkbox, validation: arrayValidation },
+};
 
 export const AddLibrary = () => {
   const { libraryService } = useServices();
@@ -28,11 +61,32 @@ export const AddLibrary = () => {
     return data as GetPropertiesSuccessReply;
   });
 
-  const { setLibrary } = useLibraryStatus();
+  const schema = useMemo(() => {
+    if (!libraryPropertiesQuery.data) {
+      return z.object({});
+    }
+
+    const validationObject = libraryPropertiesQuery.data.properties.reduce((acc, curr) => {
+      return { ...acc, [curr.name]: typeConfig[curr.type].validation({ required: curr.required }) };
+    }, {});
+
+    return z.object(validationObject);
+  }, [libraryPropertiesQuery.data]);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
+
+  const { setLibrary, existOnDb, existOnNPM } = useLibraryStatus();
 
   const { value, setValue } = useDebouncedInput({
     onSearch: (value) => {
-      setLibrary(value);
+      setLibrary(value.trim());
     },
     wait: 1000,
   });
@@ -61,36 +115,50 @@ export const AddLibrary = () => {
   };
 
   return (
-    <form className="grid gap-[20px]">
-      <div className="form-control w-full">
-        <InputLabel label="Название библиотеки" />
-        <Input value={value} onChange={handleLibraryNameChange} />
-      </div>
-      <Fieldset label="Выберите платформу">
-        <Radio name="platform" value="frontend" label="Frontend" />
-        <Radio name="platform" value="backend" label="Backend" />
-        <Radio name="platform" value="isomorphic" label="Isomorphic" />
-      </Fieldset>
-      <Fieldset label="Выберите теги">
-        <Checkbox value="kek1" label="Kek1" />
-        <Checkbox value="kek2" label="Kek2" />
-        <Checkbox value="kek3" label="Kek3" />
-      </Fieldset>
-      <Fieldset label="Выберите статус">
-        <Radio name="status" value="frontend" label="Frontend" />
-        <Radio name="status" value="backend" label="Backend" />
-        <Radio name="status" value="isomorphic" label="Isomorphic" />
-      </Fieldset>
-      <Fieldset label="Поставьте рейтинг">
-        <Radio name="rating" value="frontend" label="Frontend" />
-        <Radio name="rating" value="backend" label="Backend" />
-        <Radio name="rating" value="isomorphic" label="Isomorphic" />
-      </Fieldset>
-      <Textarea label="Напишите ревью" placeholder="Review" />
-      <Button type="submit" loading>
-        Добавить
-      </Button>
-      <Alert type="success" message="Your purchase has been confirmed!" />
-    </form>
+    <>
+      <Form onSubmit={handleSubmit((d) => console.log('d', d))}>
+        {libraryPropertiesQuery.data.properties.map(({ id, name, required, type, ...property }) => {
+          const requiredMark = required ? '*' : '';
+          const label = `${property.label}${requiredMark}`.trim();
+
+          if (type === 'text') {
+            return (
+              <div key={id} className="form-control w-full">
+                <InputLabel label={label} />
+                <Input {...register(name)} value={value} onChange={handleLibraryNameChange} />
+                {errors[name]?.message && <FieldError message={errors[name]?.message} />}
+              </div>
+            );
+          }
+
+          if (type === 'multiline_text') {
+            return (
+              <Fragment key={id}>
+                <Textarea {...register(name)} label={label} />
+                {errors[name]?.message && <FieldError message={errors[name]?.message} />}
+              </Fragment>
+            );
+          }
+
+          return (
+            <Fieldset key={id} label={label} errorMessage={errors[name]?.message}>
+              {property.value?.map((value) => {
+                const { Element } = typeConfig[type];
+                return (
+                  <Element
+                    key={value.id}
+                    {...register(name)}
+                    value={value.name}
+                    label={value.name}
+                  />
+                );
+              })}
+            </Fieldset>
+          );
+        })}
+        <Button type="submit">Добавить</Button>
+      </Form>
+      {import.meta.env.DEV && <DevTool control={control} />}
+    </>
   );
 };
