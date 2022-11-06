@@ -50,6 +50,28 @@ const typeConfig = {
   multi_select: { Element: Checkbox, validation: arrayValidation },
 };
 
+const constructInputErrorMessage = (
+  libraryName: string,
+  validationErrorMessage: string | undefined,
+  existOnDb: boolean | null,
+  existOnNPM: boolean | null,
+): string => {
+  console.log({ existOnDb, existOnNPM, validationErrorMessage });
+  if (existOnDb !== null && existOnDb) {
+    return `${libraryName} уже есть в базе`;
+  }
+
+  if (validationErrorMessage) {
+    return validationErrorMessage;
+  }
+
+  if (existOnNPM !== null && !existOnNPM) {
+    return `Библиотека ${libraryName} не найдена в NPM`;
+  }
+
+  return '';
+};
+
 export const AddLibrary = () => {
   const { libraryService } = useServices();
 
@@ -79,6 +101,8 @@ export const AddLibrary = () => {
     control,
     formState: { errors },
   } = useForm({
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
     resolver: zodResolver(schema),
   });
 
@@ -88,7 +112,7 @@ export const AddLibrary = () => {
     onSearch: (value) => {
       setLibrary(value.trim());
     },
-    wait: 1000,
+    wait: 300,
   });
 
   if (libraryPropertiesQuery.isLoading) {
@@ -116,17 +140,28 @@ export const AddLibrary = () => {
 
   return (
     <>
-      <Form onSubmit={handleSubmit((d) => console.log('d', d))}>
+      <Form
+        onSubmit={handleSubmit((d) => {
+          console.log('d', d);
+        })}
+      >
         {libraryPropertiesQuery.data.properties.map(({ id, name, required, type, ...property }) => {
           const requiredMark = required ? '*' : '';
           const label = `${property.label}${requiredMark}`.trim();
+          const errorMessage = errors[name]?.message as string | undefined;
 
           if (type === 'text') {
+            const inputError = constructInputErrorMessage(
+              value.trim(),
+              errorMessage,
+              existOnDb,
+              existOnNPM,
+            );
             return (
               <div key={id} className="form-control w-full">
                 <InputLabel label={label} />
-                <Input {...register(name)} value={value} onChange={handleLibraryNameChange} />
-                {errors[name]?.message && <FieldError message={errors[name]?.message} />}
+                <Input {...register(name, { value, onChange: handleLibraryNameChange })} />
+                {inputError && <FieldError message={inputError} />}
               </div>
             );
           }
@@ -135,13 +170,13 @@ export const AddLibrary = () => {
             return (
               <Fragment key={id}>
                 <Textarea {...register(name)} label={label} />
-                {errors[name]?.message && <FieldError message={errors[name]?.message} />}
+                {errorMessage && <FieldError message={errorMessage} />}
               </Fragment>
             );
           }
 
           return (
-            <Fieldset key={id} label={label} errorMessage={errors[name]?.message}>
+            <Fieldset key={id} label={label} errorMessage={errorMessage}>
               {property.value?.map((value) => {
                 const { Element } = typeConfig[type];
                 return (
