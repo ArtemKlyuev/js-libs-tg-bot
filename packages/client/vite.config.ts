@@ -12,7 +12,13 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          common: ['react', 'react-dom/client', 'react-router-dom', '@tanstack/react-query'],
+          'common-vendor': [
+            'react',
+            'react-dom/client',
+            'react-router-dom',
+            '@tanstack/react-query',
+          ],
+          'common-forms': ['react-hook-form', '@hookform/resolvers/zod', 'zod'],
         },
       },
     },
