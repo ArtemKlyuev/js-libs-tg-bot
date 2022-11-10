@@ -21,7 +21,7 @@ export const searchRoute: FastifyPluginAsync = async (app) => {
           return reply.status(error.statusCode).send({ error: error.message, results: null });
         }
 
-        throw error;
+        return error;
       },
     },
     async (request, reply) => {

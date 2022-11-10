@@ -21,7 +21,7 @@ export const checkExistingLibraryRoute: FastifyPluginAsync = async (app) => {
           return reply.status(error.statusCode).send({ error: error.message, exist: false });
         }
 
-        throw error;
+        return error;
       },
     },
     async (request, reply) => {

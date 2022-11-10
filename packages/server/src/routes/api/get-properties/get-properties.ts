@@ -20,7 +20,7 @@ export const getPropertiesRoute: FastifyPluginAsync = async (app) => {
           return reply.status(error.statusCode).send({ error: error.message, created: false });
         }
 
-        throw error;
+        return error;
       },
     },
     async (request, reply) => {
