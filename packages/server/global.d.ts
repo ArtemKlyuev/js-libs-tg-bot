@@ -3,8 +3,10 @@ interface Env {
   readonly NOTION_TOKEN: string;
   readonly NOTION_DATABASE_ID: string;
   readonly HOST: string;
-  readonly PORT: number;
-  readonly ALLOWED_ORIGINS: string[];
+  readonly PORT: string;
+  readonly ALLOWED_ORIGINS: string;
+  readonly LOGIN: string;
+  readonly PASSWORD: string;
 }
 
 type EnvVaribales = keyof Env;

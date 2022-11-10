@@ -1,3 +1,13 @@
+if (!process.env.NODE_ENV) {
+  throw new Error('process.env.NODE_ENV is not defined');
+}
+
+export interface ParsedEnvVariables extends Omit<Env, 'ALLOWED_ORIGINS' | 'LOGIN' | 'PORT'> {
+  readonly ALLOWED_ORIGINS: string[];
+  readonly LOGIN: number;
+  readonly PORT: number;
+}
+
 const envs: EnvVaribales[] = [
   'NODE_ENV',
   'HOST',
@@ -5,11 +15,9 @@ const envs: EnvVaribales[] = [
   'ALLOWED_ORIGINS',
   'NOTION_DATABASE_ID',
   'NOTION_TOKEN',
+  'LOGIN',
+  'PASSWORD',
 ];
-
-export interface ParsedEnvVariables extends Omit<Env, 'TELEGRAM_VALID_USER_ID'> {
-  TELEGRAM_VALID_USER_ID: number;
-}
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -30,7 +38,7 @@ export class Config {
   }
 
   static #processEnvVariableValue(name: EnvVaribales, value: string): string | string[] | number {
-    if (name === 'PORT') {
+    if (name === 'PORT' || name === 'LOGIN') {
       return Number(value);
     }
 
