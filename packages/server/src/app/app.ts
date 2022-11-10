@@ -40,5 +40,7 @@ export const createApp = (options?: Options) => {
     }
   };
 
-  return { ...app, start };
+  app.decorate('start', start);
+
+  return app;
 };
