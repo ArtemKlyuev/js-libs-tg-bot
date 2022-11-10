@@ -10,7 +10,7 @@ import { createDIContainer } from './diContainer';
 const app = createApp();
 
 app.register(cors, {
-  origin: Config.env.ALLOWED_ORIGINS,
+  origin: Config.env.NODE_ENV === 'development' ? '*' : Config.env.ALLOWED_ORIGINS,
   credentials: true,
 });
 
