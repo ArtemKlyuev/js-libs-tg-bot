@@ -8,5 +8,5 @@ export interface LocalStorage {
   findKeyByIndex: (index: number) => string | null;
   forEach: (callback: LocalStorageForEachCallback, shouldParse?: boolean) => void;
   entries: () => [string, string][] | never[];
-  readonly length: number;
+  readonly size: number;
 }

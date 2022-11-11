@@ -1,7 +1,7 @@
 import { LocalStorage, LocalStorageForEachCallback } from './types';
 
-export class LocalStorageService implements LocalStorage {
-  get<T = string>(key: string, shouldParse?: boolean): T | null {
+export const LocalStorageService: LocalStorage = class LocalStorageService {
+  static get<T = string>(key: string, shouldParse?: boolean): T | null {
     const value = localStorage.getItem(key);
 
     if (!shouldParse) {
@@ -17,23 +17,23 @@ export class LocalStorageService implements LocalStorage {
     }
   }
 
-  set(key: string, value: any): void {
+  static set(key: string, value: any): void {
     localStorage.setItem(key, value);
   }
 
-  remove(key: string): void {
+  static remove(key: string): void {
     localStorage.removeItem(key);
   }
 
-  clear(): void {
+  static clear(): void {
     localStorage.clear();
   }
 
-  findKeyByIndex(index: number): string | null {
+  static findKeyByIndex(index: number): string | null {
     return localStorage.key(index);
   }
 
-  forEach(callback: LocalStorageForEachCallback): void {
+  static forEach(callback: LocalStorageForEachCallback): void {
     for (let i = 0; i < localStorage.length; i += 1) {
       const key = localStorage.key(i)!;
       const value = this.get<string>(key)!;
@@ -42,7 +42,7 @@ export class LocalStorageService implements LocalStorage {
     }
   }
 
-  entries(): [string, string][] | never[] {
+  static entries(): [string, string][] | never[] {
     if (!localStorage.length) {
       return [];
     }
@@ -54,7 +54,7 @@ export class LocalStorageService implements LocalStorage {
     return result;
   }
 
-  get length(): number {
+  static get size(): number {
     return localStorage.length;
   }
-}
+};
