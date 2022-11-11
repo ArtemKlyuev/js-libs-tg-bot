@@ -8,6 +8,7 @@ interface Services {
   httpRequest: HttpRequest;
   libraryService: Library;
   config: Config;
+  telegram: Window['Telegram']['WebApp'];
 }
 
 const ServicesContext = createContext<Services>({} as Services);

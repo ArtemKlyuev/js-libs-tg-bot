@@ -65,11 +65,13 @@ const httpRequest = new AxiosHttpRequest({
 });
 
 const libraryService = new LibraryService(httpRequest);
+const telegram = window.Telegram.WebApp;
 
 const services = {
   config,
   httpRequest,
   libraryService,
+  telegram,
 };
 
 ReactDOM.createRoot(root).render(
