@@ -1,10 +1,10 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { HttpRequestError } from 'common/services';
 import { GetPropertiesSuccessReply, GetPropertiesErrorReply } from 'server/types';
 
 import { AbsoluteCenter, ErrorMessage, Spinner } from '@components';
-import { useServices } from '@hooks';
+import { useAppCache, useServices } from '@hooks';
 
 const LibraryForm = lazy(() =>
   import('./LibraryForm').then((module) => ({ default: module.LibraryForm })),
@@ -19,15 +19,33 @@ const centeredSpinner = (
 export const AddLibrary = () => {
   const { libraryService } = useServices();
 
+  const cache = useAppCache();
+
   const { isLoading, isError, error, data, refetch } = useQuery<
     GetPropertiesSuccessReply,
     HttpRequestError<GetPropertiesErrorReply>
-  >(['library-properties'], async () => {
-    const { data } = await libraryService.getProperties().response;
-    return data as GetPropertiesSuccessReply;
-  });
+  >(
+    ['library-properties'],
+    async () => {
+      const { data } = await libraryService.getProperties().response;
+      return data as GetPropertiesSuccessReply;
+    },
+    { enabled: cache.isEmpty() },
+  );
 
-  if (isLoading) {
+  useEffect(() => {
+    if (cache.isEmpty()) {
+      refetch();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (data?.properties) {
+      cache.set('properties', data.properties);
+    }
+  }, [data?.properties]);
+
+  if (cache.isEmpty() && !data?.properties && isLoading) {
     return centeredSpinner;
   }
 
@@ -43,7 +61,7 @@ export const AddLibrary = () => {
 
   return (
     <Suspense fallback={centeredSpinner}>
-      <LibraryForm properties={data.properties} />
+      <LibraryForm properties={cache.get('properties') ?? data!.properties} />
     </Suspense>
   );
 };
