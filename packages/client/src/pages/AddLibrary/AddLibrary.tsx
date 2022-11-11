@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { HttpRequestError } from 'common/services';
 import { GetPropertiesSuccessReply, GetPropertiesErrorReply } from 'server/types';
@@ -18,7 +18,6 @@ const centeredSpinner = (
 
 export const AddLibrary = () => {
   const { libraryService } = useServices();
-
   const cache = useAppCache();
 
   const { isLoading, isError, error, data, refetch } = useQuery<
@@ -30,20 +29,11 @@ export const AddLibrary = () => {
       const { data } = await libraryService.getProperties().response;
       return data as GetPropertiesSuccessReply;
     },
-    { enabled: cache.isEmpty() },
+    {
+      enabled: cache.isEmpty(),
+      onSuccess: (data) => cache.set('properties', data.properties),
+    },
   );
-
-  useEffect(() => {
-    if (cache.isEmpty()) {
-      refetch();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (data?.properties) {
-      cache.set('properties', data.properties);
-    }
-  }, [data?.properties]);
 
   if (cache.isEmpty() && !data?.properties && isLoading) {
     return centeredSpinner;
