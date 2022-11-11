@@ -5,6 +5,7 @@ import {
   CheckExistingErrorResponse,
   GetPropertiesSuccessReply,
   GetPropertiesErrorReply,
+  SearchLibraryReply,
 } from 'server/types';
 
 export type LibraryInfo = AddLibraryBody;
@@ -15,6 +16,7 @@ export interface Library {
   add: (library: LibraryInfo) => Request<LibraryInfo>;
   checkExisting: (name: string) => Request<CheckExistingResponse>;
   getProperties: () => Request<GetPropertiesResponse>;
+  search: (query: string) => Request<SearchLibraryReply>;
 }
 
 export class LibraryService implements Library {
@@ -35,6 +37,12 @@ export class LibraryService implements Library {
   checkExisting(name: string): Request<CheckExistingResponse> {
     return this.#httpRequest.get<CheckExistingResponse>('/library/check-existing', {
       params: { name },
+    });
+  }
+
+  search(query: string): Request<SearchLibraryReply> {
+    return this.#httpRequest.get<SearchLibraryReply>('/library/search', {
+      params: { query },
     });
   }
 }
