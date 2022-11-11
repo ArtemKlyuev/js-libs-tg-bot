@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import {
   Request,
@@ -13,6 +13,7 @@ export interface AxiosHttpRequestOptions {
   baseURL?: string;
   headers?: Record<string, string>;
   withCredentials?: boolean;
+  auth?: AxiosRequestConfig['auth'];
 }
 
 type Cancel = (reason?: string) => void;
