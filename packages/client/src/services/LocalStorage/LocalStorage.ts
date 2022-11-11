@@ -21,6 +21,10 @@ export const LocalStorageService: LocalStorage = class LocalStorageService {
     localStorage.setItem(key, value);
   }
 
+  static has(key: string): boolean {
+    return key in localStorage;
+  }
+
   static remove(key: string): void {
     localStorage.removeItem(key);
   }
