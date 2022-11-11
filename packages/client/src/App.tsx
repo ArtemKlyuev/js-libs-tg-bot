@@ -8,7 +8,7 @@ import { config } from '@config';
 import { Error } from '@pages';
 import { Layout } from '@components';
 import { ServicesProvider } from '@hooks';
-import { LibraryService } from '@services';
+import { LibraryService, LocalStorageService } from '@services';
 
 const SearchLibraryPage = lazy(() =>
   import('./pages/SearchLibrary').then((module) => ({
@@ -54,12 +54,10 @@ const router = createBrowserRouter([
 ]);
 
 const params = new URLSearchParams(window.location.search);
-
 const id = params.get('id') ?? '0';
 
 const httpRequest = new AxiosHttpRequest({
   baseURL: `${config.env.BACKEND_URL}/api`,
-  withCredentials: true,
   auth: { username: id, password: config.env.PASSWORD },
 });
 
@@ -71,6 +69,7 @@ const services = {
   httpRequest,
   libraryService,
   telegram,
+  LocalStorage: LocalStorageService,
 };
 
 export const App = () => {
