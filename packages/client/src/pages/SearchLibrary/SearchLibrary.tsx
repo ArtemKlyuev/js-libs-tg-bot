@@ -16,8 +16,36 @@ interface Fields {
 
 const schema = z.object({ query: z.string().trim().min(1, { message: 'Required' }) });
 
+const numberFormat = new Intl.NumberFormat();
+
+const select = (data: SearchLibrarySucessReply) => {
+  const results = data.results.map((library) =>
+    library.map(({ value, ...props }) => {
+      if (!value) {
+        return { ...props, value: 'Нет данных' };
+      }
+
+      if (typeof value === 'number') {
+        return { ...props, value: numberFormat.format(value) };
+      }
+
+      if (Array.isArray(value)) {
+        return { ...props, value: value.map(({ name }) => `#${name}`).join(', ') };
+      }
+
+      if (typeof value === 'object') {
+        return { ...props, value: value.name };
+      }
+
+      return { ...props, value };
+    }),
+  );
+
+  return { error: data.error, results };
+};
+
 export const SearchLibrary = () => {
-  const { libraryService } = useServices();
+  const { libraryService, config } = useServices();
 
   const { handleSubmit, register, reset, control } = useForm<Fields>({
     mode: 'onSubmit',
@@ -36,12 +64,10 @@ export const SearchLibrary = () => {
       const { data } = await libraryService.search(query).response;
       return data as SearchLibrarySucessReply;
     },
-    { enabled: Boolean(query), onSuccess: () => reset() },
+    { enabled: Boolean(query), onSuccess: () => reset(), select },
   );
 
   const onSubmit = handleSubmit((data) => setQuery(data.query));
-
-  console.log('dataaaaa --->', data);
 
   return (
     <>
@@ -50,16 +76,28 @@ export const SearchLibrary = () => {
           <InputLabel label="Ключевое слово" />
           <Input type="search" {...register('query')} />
         </div>
-        {/* <button type="submit">aaaaa</button> */}
         <Button type="submit">Искать</Button>
-        <div className="card w-96 bg-neutral text-neutral-content">
-          <div className="card-body">
-            <h2 className="card-title">Shoes!</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-          </div>
-        </div>
       </Form>
-      {import.meta.env.DEV && <DevTool control={control} />}
+      {data?.results && (
+        <div className="mt-10">
+          {data.results.map((properties) => {
+            const [{ id }] = properties;
+
+            return (
+              <button key={id} className="card bg-neutral text-neutral-content">
+                <div className="card-body gap-[15px]">
+                  {properties.map(({ id, name, value }) => (
+                    <div key={id} className="text-left">
+                      <span className="font-bold">{name}:</span>&nbsp;<span>{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+      {config.env.DEV && <DevTool control={control} />}
     </>
   );
 };
