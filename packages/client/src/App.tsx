@@ -62,7 +62,7 @@ const httpRequest = new AxiosHttpRequest({
 });
 
 const libraryService = new LibraryService(httpRequest);
-const telegram = window.Telegram.WebApp;
+const telegram = window?.Telegram?.WebApp;
 
 const services = {
   config,
