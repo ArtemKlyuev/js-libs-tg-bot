@@ -27,8 +27,8 @@ const definedQueryStringSchema = JSONSchema.defineSchema
 
 const queryStringSchema = JSONSchema.toJSONSchema(definedQueryStringSchema);
 
-const definedResponseSchema = JSONSchema.defineSchema.object({
-  error: JSONSchema.defineSchema.string().min(1).or(JSONSchema.defineSchema.null()),
+const successResponseSchema = {
+  error: JSONSchema.defineSchema.null(),
   results: JSONSchema.defineSchema
     .object({
       id: JSONSchema.defineSchema.string().min(1),
@@ -53,8 +53,17 @@ const definedResponseSchema = JSONSchema.defineSchema.object({
         ),
     })
     .array()
-    .array()
-    .or(JSONSchema.defineSchema.void().array().length(0)),
+    .array(),
+};
+
+const errorResponseSchema = {
+  error: JSONSchema.defineSchema.string().min(1),
+  results: JSONSchema.defineSchema.void().array().length(0),
+};
+
+const definedResponseSchema = JSONSchema.defineSchema.object({
+  error: successResponseSchema.error.or(errorResponseSchema.error),
+  results: successResponseSchema.results.or(errorResponseSchema.results),
 });
 
 const responseSchema = JSONSchema.toJSONSchema(definedResponseSchema);
@@ -63,6 +72,12 @@ export const schema: FastifySchema = {
   querystring: queryStringSchema,
   response: { 200: responseSchema, 400: responseSchema, 404: responseSchema, 422: responseSchema },
 };
+
+const success = JSONSchema.defineSchema.object(successResponseSchema);
+const error = JSONSchema.defineSchema.object(errorResponseSchema);
+
+export type SuccessReply = ToTS<typeof success>;
+export type ErrorReply = ToTS<typeof error>;
 
 export type Querystring = ToTS<typeof definedQueryStringSchema>;
 
