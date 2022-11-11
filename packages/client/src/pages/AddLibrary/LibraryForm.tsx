@@ -3,9 +3,8 @@ import { DevTool } from '@hookform/devtools';
 import { GetPropertiesSuccessReply } from 'server/types';
 
 import { Button, FieldError, Fieldset, Form, Input, InputLabel, Textarea } from '@components';
-import { useLibraryInput } from '@hooks';
 
-import { useAddLibraryForm } from './hooks';
+import { useAddLibraryForm, useLibraryInput } from './hooks';
 
 interface Props {
   properties: GetPropertiesSuccessReply['properties'];
