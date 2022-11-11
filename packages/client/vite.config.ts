@@ -4,6 +4,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [splitVendorChunkPlugin(), tsconfigPaths(), react()],
+  envPrefix: 'APP_EXPOSE_',
   build: {
     chunkSizeWarningLimit: 250,
     target: 'esnext',
