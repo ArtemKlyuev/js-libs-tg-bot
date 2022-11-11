@@ -1,9 +1,10 @@
 interface Env {
-  BACKEND_URL: string;
   MODE: 'development' | 'production';
   DEV: boolean;
   PROD: boolean;
   BASE_URL: string;
+  BACKEND_URL: string;
+  PASSWORD: string;
 }
 
 export interface Config {
