@@ -1,44 +1,33 @@
 import { Telegraf, Markup } from 'telegraf';
 
-import { Config } from '@config';
+import { Config } from '../config';
 
 import { userPermissionGuard } from './middlewares';
 import { commands } from './commands';
 
 export const startBot = async (): Promise<void> => {
-  const bot = new Telegraf(Config.env.TELEGRAM_BOT_TOKEN, {
-    telegram: { testEnv: Config.env.NODE_ENV === 'development' },
-  });
+  const bot = new Telegraf(Config.env.TELEGRAM_BOT_TOKEN);
 
   bot.use(userPermissionGuard(Config.env.TELEGRAM_VALID_USER_ID));
 
   await bot.telegram.setMyCommands(commands);
 
-  bot.start(async (ctx) => {
-    await ctx.reply(
-      'Welcome!',
-      Markup.keyboard([
-        [
-          Markup.button.webApp('youtube', 'https://www.youtube.com/'),
-          Markup.button.webApp('youtube2', 'https://www.youtube.com/'),
-        ],
-      ]),
+  const addLibraryButton = (id: number) => {
+    return Markup.button.webApp(
+      'Добавить библиотеку',
+      `${Config.env.WEB_APP_URL}/library/add?id=${id}`,
     );
+  };
+
+  bot.start(async (ctx) => {
+    await ctx.reply('Welcome!', Markup.keyboard([[addLibraryButton(ctx.update.message.from.id)]]));
   });
 
   bot.command('healthcheck', async (ctx) => {
-    await ctx.reply(
-      'Ok',
-      Markup.keyboard([
-        [
-          Markup.button.webApp('youtube', 'https://www.youtube.com/'),
-          Markup.button.webApp('youtube2', 'https://www.youtube.com/'),
-          Markup.button.webApp('localhost', 'https://localhost:3000/'),
-        ],
-      ]),
-    );
+    await ctx.reply('Ok', Markup.keyboard([[addLibraryButton(ctx.update.message.from.id)]]));
   });
-  bot.command('add', (ctx) => ctx.reply('kek')), bot.launch();
+
+  bot.launch();
 
   process.once('SIGINT', () => {
     console.log('bot SIGINT');
