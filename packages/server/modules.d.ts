@@ -13,3 +13,9 @@ declare module '@fastify/awilix' {
     npmRegistry: NPMRegistry;
   }
 }
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    start: () => Promise<void>;
+  }
+}
