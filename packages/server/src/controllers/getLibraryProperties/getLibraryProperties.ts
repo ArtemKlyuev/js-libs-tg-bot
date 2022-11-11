@@ -37,7 +37,8 @@ const nameToConfig: NameToConfig = {
   },
 };
 
-export const getLibraryProperties = (dbRepository: DatabaseRepository): any => {
+// TODO: исправить ошибку
+export const getLibraryProperties = (dbRepository: DatabaseRepository) => {
   return dbRepository.getProperties().then((eitherProperties) => {
     return eitherProperties.mapRight((properties) => {
       return properties
