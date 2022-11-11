@@ -18,6 +18,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
+      "@config": ["./src/config/index.ts"],
       "@services": ["./src/services/index.ts"],
       "@components": ["./src/components/index.ts"],
       "@hooks": ["./src/hooks/index.ts"],

@@ -9,6 +9,8 @@ import { Layout } from '@components';
 import { ServicesProvider } from '@hooks';
 import { LibraryService } from '@services';
 
+import { config } from './config';
+
 import { App } from './App';
 
 import './index.scss';
@@ -58,13 +60,14 @@ const router = createBrowserRouter([
 ]);
 
 const httpRequest = new AxiosHttpRequest({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: `${config.env.BACKEND_URL}/api`,
   withCredentials: true,
 });
 
 const libraryService = new LibraryService(httpRequest);
 
 const services = {
+  config,
   httpRequest,
   libraryService,
 };

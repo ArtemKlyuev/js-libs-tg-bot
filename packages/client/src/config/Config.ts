@@ -6,7 +6,7 @@ interface Env {
   BASE_URL: string;
 }
 
-interface Config {
+export interface Config {
   env: Env;
 }
 
