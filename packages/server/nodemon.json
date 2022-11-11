@@ -1,4 +1,6 @@
 {
+  "$schema": "https://json.schemastore.org/nodemon.json",
+  "watch": [".env.local", "src/*"],
   "execMap": {
     "ts": "node --experimental-specifier-resolution=node --loader ./loader.js"
   }
