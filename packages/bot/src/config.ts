@@ -1,4 +1,9 @@
-const envs: EnvVaribales[] = ['NODE_ENV', 'TELEGRAM_BOT_TOKEN', 'TELEGRAM_VALID_USER_ID'];
+const envs: EnvVaribales[] = [
+  'NODE_ENV',
+  'TELEGRAM_BOT_TOKEN',
+  'TELEGRAM_VALID_USER_ID',
+  'WEB_APP_URL',
+];
 
 interface ParsedEnvVariables extends Omit<Env, 'TELEGRAM_VALID_USER_ID'> {
   TELEGRAM_VALID_USER_ID: number;
