@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "postinstall": "patch-package",
+    "proxy": "docker-compose up",
     "add:root": "yarn add -W -D -E",
     "dev:server:client": "yarn lerna run dev --scope='{server,client}' --parallel",
     "package:bot": "yarn workspace bot",
