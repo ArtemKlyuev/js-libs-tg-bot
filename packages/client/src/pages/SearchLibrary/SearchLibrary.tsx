@@ -7,18 +7,30 @@ import { z } from 'zod';
 import { HttpRequestError } from 'common/services';
 import { SearchLibrarySucessReply, SearchLibraryErrorReply } from 'server/types';
 
-import { Form, InputLabel, Input, Button } from '@components';
+import { Form, InputLabel, Input, Button, LibraryCard } from '@components';
 import { useServices } from '@hooks';
 
 interface Fields {
   query: string;
 }
 
+interface LibraryProperty {
+  id: string;
+  name: string;
+  value: string;
+}
+
+type Library = LibraryProperty[];
+interface Data {
+  error: null;
+  results: Library[];
+}
+
 const schema = z.object({ query: z.string().trim().min(1, { message: 'Required' }) });
 
 const numberFormat = new Intl.NumberFormat();
 
-const select = (data: SearchLibrarySucessReply) => {
+const select = (data: SearchLibrarySucessReply): Data => {
   const results = data.results.map((library) =>
     library.map(({ value, ...props }) => {
       if (!value) {
@@ -56,13 +68,13 @@ export const SearchLibrary = () => {
   const [query, setQuery] = useState('');
 
   const { isLoading, isError, error, data } = useQuery<
-    SearchLibrarySucessReply,
+    Data,
     HttpRequestError<SearchLibraryErrorReply>
   >(
     ['search-library', query],
     async () => {
       const { data } = await libraryService.search(query).response;
-      return data as SearchLibrarySucessReply;
+      return data as Data;
     },
     { enabled: Boolean(query), onSuccess: () => reset(), select },
   );
@@ -83,17 +95,7 @@ export const SearchLibrary = () => {
           {data.results.map((properties) => {
             const [{ id }] = properties;
 
-            return (
-              <button key={id} className="card bg-neutral text-neutral-content">
-                <div className="card-body gap-[15px]">
-                  {properties.map(({ id, name, value }) => (
-                    <div key={id} className="text-left">
-                      <span className="font-bold">{name}:</span>&nbsp;<span>{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </button>
-            );
+            return <LibraryCard key={id} properties={properties} />;
           })}
         </div>
       )}
