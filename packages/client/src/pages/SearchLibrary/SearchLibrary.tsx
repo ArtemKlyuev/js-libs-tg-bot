@@ -82,14 +82,16 @@ export const SearchLibrary = () => {
 
   const onSubmit = handleSubmit((data) => setQuery(data.query));
 
-  const sendToTelegram = (id: string) => {
+  const sendSelectedToTelegram = (): void => {
     const result = data?.results
-      .find((properties) => {
-        const [title] = properties;
-        return title.id === id;
+      .filter((properties) => {
+        const [{ value: name }] = properties;
+
+        return Boolean(selectedIDs.find((id) => id === name));
       })
-      ?.map(({ name, value }) => `${name}: ${value}`)
-      .join('\n\n');
+      ?.map((library) => {
+        return library.map(({ name, value }) => `${name}: ${value}`).join('\n\n');
+      });
 
     telegram.sendData(result);
   };
@@ -133,19 +135,26 @@ export const SearchLibrary = () => {
           <ErrorMessage message={error.message} messageFromServer={error.responseData?.error} />
         )}
         {data?.results.map((properties) => {
-          const [{ value: id }] = properties;
-          const handleClick = () => toggleSelectLibrary(id);
-          const hasID = Boolean(selectedIDs.find((inclID) => inclID === id));
+          const [{ value: name }] = properties;
+          const handleClick = () => toggleSelectLibrary(name);
+          const hasID = Boolean(selectedIDs.find((inclID) => inclID === name));
 
           return (
-            <LibraryCard key={id} selected={hasID} properties={properties} onClick={handleClick} />
+            <LibraryCard
+              key={name}
+              selected={hasID}
+              properties={properties}
+              onClick={handleClick}
+            />
           );
         })}
       </div>
       {data?.results && (
         <div className="sticky bottom-[0] mt-[20px] flex flex-col content-center gap-[10px]">
           {selectedIDs.length !== 0 && (
-            <Button>Отправить библиотек в телеграм: {selectedIDs.length}</Button>
+            <Button onClick={sendSelectedToTelegram}>
+              Отправить библиотек в телеграм: {selectedIDs.length}
+            </Button>
           )}
           <Button onClick={sendAllToTelegram}>Отправить все библиотеки в телеграм</Button>
         </div>
