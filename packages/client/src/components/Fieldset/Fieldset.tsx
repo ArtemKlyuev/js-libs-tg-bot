@@ -8,7 +8,7 @@ interface Props {
 
 export const Fieldset = ({ children, label, errorMessage }: Props) => {
   return (
-    <fieldset>
+    <fieldset className="max-h-[300px] overflow-y-auto">
       <legend>{label}</legend>
       {errorMessage && <FieldError message={errorMessage} />}
       {children}
