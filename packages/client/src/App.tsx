@@ -59,6 +59,7 @@ const id = params.get('id') ?? '0';
 const httpRequest = new AxiosHttpRequest({
   baseURL: `${config.env.BACKEND_URL}/api`,
   auth: { username: id, password: config.env.PASSWORD },
+  withCredentials: true,
 });
 
 const libraryService = new LibraryService(httpRequest);
