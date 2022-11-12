@@ -143,11 +143,11 @@ export const SearchLibrary = () => {
         })}
       </div>
       {data?.results && (
-        <div className="fixed bottom-[30px] left-1/2 transform -translate-x-1/2 flex flex-col content-center ">
+        <div className="sticky bottom-[0] mt-[20px] flex flex-col content-center gap-[10px]">
           {selectedIDs.length !== 0 && (
-            <button>Отправить {selectedIDs.length} библиотек в телеграм</button>
+            <Button>Отправить библиотек в телеграм: {selectedIDs.length}</Button>
           )}
-          <button onClick={sendAllToTelegram}>Отправить все библиотеки в телеграм</button>
+          <Button onClick={sendAllToTelegram}>Отправить все библиотеки в телеграм</Button>
         </div>
       )}
       {config.env.DEV && <DevTool control={control} />}
