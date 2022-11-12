@@ -15,7 +15,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, Props>(({ label, ...prop
       <label className="label">
         <span className="label-text">{label}</span>
       </label>
-      <textarea ref={ref} className="textarea textarea-bordered h-24" {...props} />
+      <textarea ref={ref} className="textarea textarea-bordered h-24 resize-none" {...props} />
     </div>
   );
 });
