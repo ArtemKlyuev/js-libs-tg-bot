@@ -3,14 +3,11 @@ import { Telegraf, Markup } from 'telegraf';
 import { Config } from '../config';
 
 import { userPermissionGuard } from './middlewares';
-import { commands } from './commands';
 
 export const startBot = async (): Promise<void> => {
   const bot = new Telegraf(Config.env.TELEGRAM_BOT_TOKEN);
 
   bot.use(userPermissionGuard(Config.env.TELEGRAM_VALID_USER_ID));
-
-  await bot.telegram.setMyCommands(commands);
 
   const addLibraryButton = (id: number) => {
     return Markup.button.webApp(
@@ -19,12 +16,33 @@ export const startBot = async (): Promise<void> => {
     );
   };
 
+  const searchLibraryButton = (id: number) => {
+    return Markup.button.webApp(
+      'Найти библиотеку',
+      `${Config.env.WEB_APP_URL}/library/search?id=${id}`,
+    );
+  };
+
   bot.start(async (ctx) => {
-    await ctx.reply('Welcome!', Markup.keyboard([[addLibraryButton(ctx.update.message.from.id)]]));
+    const { id } = ctx.update.message.from;
+    await ctx.reply(
+      'Welcome!',
+      Markup.keyboard([[addLibraryButton(id), searchLibraryButton(id)]]).resize(),
+    );
   });
 
-  bot.command('healthcheck', async (ctx) => {
-    await ctx.reply('Ok', Markup.keyboard([[addLibraryButton(ctx.update.message.from.id)]]));
+  bot.on('web_app_data', async (ctx) => {
+    const result = ctx.update.message.web_app_data.data;
+
+    const sendLibrary = (library: string) => ctx.reply(library, { disable_web_page_preview: true });
+
+    try {
+      const parsed = JSON.parse(result) as string[];
+      const promises = parsed.map((library) => sendLibrary(library));
+      await Promise.all(promises);
+    } catch (error) {
+      await sendLibrary(result);
+    }
   });
 
   bot.launch();
