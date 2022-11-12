@@ -5,7 +5,7 @@ interface Props {
 
 export const Form = ({ children, onSubmit }: Props) => {
   return (
-    <form onSubmit={onSubmit} className="grid gap-[20px]">
+    <form onSubmit={onSubmit} autoComplete="off" spellCheck={false} className="grid gap-[20px]">
       {children}
     </form>
   );
