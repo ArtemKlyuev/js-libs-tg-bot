@@ -10,7 +10,7 @@ type SearchResponsePageResult = SearchResponse['results'][0];
 export type SearchResponsePageResultProperties = Extract<
   SearchResponsePageResult,
   {
-    object: 'page';
+    object: 'page' | 'database';
     url: string;
   }
 >;

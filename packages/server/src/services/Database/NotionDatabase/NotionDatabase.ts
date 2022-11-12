@@ -58,23 +58,22 @@ export class NotionDatabase implements NotionDb {
     }
   }
 
-  async findByQuery(query: string): Promise<QueryResult<DatabaseError, SearchResultProperty>> {
+  async findByQuery(query?: string): Promise<QueryResult<DatabaseError, SearchResultProperty>> {
     try {
       const response = await this.#notion.search({ query });
 
-      if (!response.results.length) {
-        throw new DatabaseFindByQueryError({ code: 404, query, message: '' });
-      }
-
-      const result = (response.results as SearchResponsePageResultProperties[]).map(
-        ({ id, properties }) => {
+      const result = (response.results as SearchResponsePageResultProperties[])
+        .filter(({ object }) => object === 'page')
+        .map(({ id, properties }) => {
           const data = Object.entries(properties).map(([name, value]) => ({ ...value, name }));
 
           return { id, data };
-        },
-      );
+        });
 
-      // @ts-expect-error Бд выдаёт нужные свойства
+      if (!result.length) {
+        throw new DatabaseFindByQueryError({ code: 404, query: 'no query', message: '' });
+      }
+
       return right(result);
     } catch (error) {
       if (error instanceof DatabaseFindByQueryError) {
@@ -83,7 +82,7 @@ export class NotionDatabase implements NotionDb {
 
       const { code = 400, message } = error;
 
-      return left(new DatabaseFindByQueryError({ code, message, query }));
+      return left(new DatabaseFindByQueryError({ code, message, query: 'no query' }));
     }
   }
 
@@ -110,7 +109,6 @@ export class NotionDatabase implements NotionDb {
         },
       );
 
-      // @ts-expect-error Бд выдаёт нужные свойства
       return right(result);
     } catch (error) {
       if (error instanceof DatabaseFindByFiltersError) {

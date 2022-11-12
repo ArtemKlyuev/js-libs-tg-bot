@@ -26,6 +26,6 @@ export interface Database<InsertData, QueryData, DatabaseSignature> {
   findByFilters: (
     config: FiltersConfig,
   ) => Promise<SearchByFiltersResult<DatabaseError, QueryData>>;
-  findByQuery: (query: string) => Promise<QueryResult<DatabaseError, QueryData>>;
+  findByQuery: (query?: string) => Promise<QueryResult<DatabaseError, QueryData>>;
   getDatabaseInfo: () => Promise<DatabaseInfo<DatabaseError, DatabaseSignature>>;
 }
