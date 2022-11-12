@@ -69,9 +69,11 @@ export const LibraryForm = ({ properties }: Props) => {
             </Fieldset>
           );
         })}
-        <Button type="submit" loading={isSubmitting}>
-          Добавить
-        </Button>
+        <div className="sticky bottom-0 grid">
+          <Button type="submit" loading={isSubmitting}>
+            Добавить
+          </Button>
+        </div>
       </Form>
       {import.meta.env.DEV && <DevTool control={control} />}
     </>
