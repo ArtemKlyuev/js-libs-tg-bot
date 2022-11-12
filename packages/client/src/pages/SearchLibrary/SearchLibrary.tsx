@@ -57,7 +57,8 @@ const select = (data: SearchLibrarySucessReply): Data => {
 };
 
 export const SearchLibrary = () => {
-  const { libraryService, config } = useServices();
+  const { libraryService, config, telegram } = useServices();
+  const [selectedIDs, setSelectedIDs] = useState<string[]>([]);
 
   const { handleSubmit, register, reset, control } = useForm<Fields>({
     mode: 'onSubmit',
@@ -81,6 +82,42 @@ export const SearchLibrary = () => {
 
   const onSubmit = handleSubmit((data) => setQuery(data.query));
 
+  const sendToTelegram = (id: string) => {
+    const result = data?.results
+      .find((properties) => {
+        const [title] = properties;
+        return title.id === id;
+      })
+      ?.map(({ name, value }) => `${name}: ${value}`)
+      .join('\n\n');
+
+    telegram.sendData(result);
+  };
+
+  const sendAllToTelegram = () => {
+    const result = data?.results?.map((library) =>
+      library.map(({ name, value }) => `${name}: ${value}`).join('\n\n'),
+    );
+
+    telegram.sendData(result);
+  };
+
+  const selectLibrary = (id: string): void => setSelectedIDs((prev) => [...prev, id]);
+  const unSelectLibrary = (id: string): void => {
+    setSelectedIDs((prev) => prev.filter((inclID) => inclID !== id));
+  };
+
+  const toggleSelectLibrary = (id: string): void => {
+    const hasID = Boolean(selectedIDs.find((inclID) => inclID === id));
+
+    if (hasID) {
+      unSelectLibrary(id);
+      return;
+    }
+
+    selectLibrary(id);
+  };
+
   return (
     <>
       <Form onSubmit={onSubmit}>
@@ -90,17 +127,29 @@ export const SearchLibrary = () => {
         </div>
         <Button type="submit">Искать</Button>
       </Form>
-      <div className="mt-10 flex justify-center gap-[10px] flex-col">
+      <div className="mt-10 flex items-center gap-[10px] flex-col">
         {isFetching && <Spinner />}
         {isError && (
           <ErrorMessage message={error.message} messageFromServer={error.responseData?.error} />
         )}
         {data?.results.map((properties) => {
-          const [{ id }] = properties;
+          const [{ value: id }] = properties;
+          const handleClick = () => toggleSelectLibrary(id);
+          const hasID = Boolean(selectedIDs.find((inclID) => inclID === id));
 
-          return <LibraryCard key={id} properties={properties} />;
+          return (
+            <LibraryCard key={id} selected={hasID} properties={properties} onClick={handleClick} />
+          );
         })}
       </div>
+      {data?.results && (
+        <div className="fixed bottom-[30px] left-1/2 transform -translate-x-1/2 flex flex-col content-center ">
+          {selectedIDs.length !== 0 && (
+            <button>Отправить {selectedIDs.length} библиотек в телеграм</button>
+          )}
+          <button onClick={sendAllToTelegram}>Отправить все библиотеки в телеграм</button>
+        </div>
+      )}
       {config.env.DEV && <DevTool control={control} />}
     </>
   );
