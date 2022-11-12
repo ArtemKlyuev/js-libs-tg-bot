@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { HttpRequestError } from 'common/services';
 import { SearchLibrarySucessReply, SearchLibraryErrorReply } from 'server/types';
 
-import { Form, InputLabel, Input, Button, LibraryCard } from '@components';
+import { Form, InputLabel, Input, Button, LibraryCard, Spinner, ErrorMessage } from '@components';
 import { useServices } from '@hooks';
 
 interface Fields {
@@ -67,7 +67,7 @@ export const SearchLibrary = () => {
 
   const [query, setQuery] = useState('');
 
-  const { isLoading, isError, error, data } = useQuery<
+  const { isFetching, isError, error, data } = useQuery<
     Data,
     HttpRequestError<SearchLibraryErrorReply>
   >(
@@ -90,15 +90,17 @@ export const SearchLibrary = () => {
         </div>
         <Button type="submit">Искать</Button>
       </Form>
-      {data?.results && (
-        <div className="mt-10">
-          {data.results.map((properties) => {
-            const [{ id }] = properties;
+      <div className="mt-10 flex justify-center gap-[10px] flex-col">
+        {isFetching && <Spinner />}
+        {isError && (
+          <ErrorMessage message={error.message} messageFromServer={error.responseData?.error} />
+        )}
+        {data?.results.map((properties) => {
+          const [{ id }] = properties;
 
-            return <LibraryCard key={id} properties={properties} />;
-          })}
-        </div>
-      )}
+          return <LibraryCard key={id} properties={properties} />;
+        })}
+      </div>
       {config.env.DEV && <DevTool control={control} />}
     </>
   );
