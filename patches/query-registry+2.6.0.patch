@@ -3,7 +3,7 @@ index 7c2f10e..671ec19 100644
 --- a/node_modules/query-registry/package.json
 +++ b/node_modules/query-registry/package.json
 @@ -4,6 +4,7 @@
-     "version": "2.5.0",
+     "version": "2.6.0",
      "author": "Edoardo Scibona (velut)",
      "license": "MIT",
 +    "type": "module",
