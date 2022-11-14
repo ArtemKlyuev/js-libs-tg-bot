@@ -2,13 +2,24 @@ import { Fragment } from 'react';
 import { DevTool } from '@hookform/devtools';
 import { GetPropertiesSuccessReply } from 'server/types';
 
-import { Button, FieldError, Fieldset, Form, Input, InputLabel, Textarea } from '@components';
+import {
+  Button,
+  FieldError,
+  Fieldset,
+  Form,
+  Input,
+  InputLabel,
+  SearchableFieldset,
+  Textarea,
+} from '@components';
 
 import { useAddLibraryForm, useLibraryInput } from './hooks';
 
 interface Props {
   properties: GetPropertiesSuccessReply['properties'];
 }
+
+const FIELD_SCROLL_THRESHOLD = 6;
 
 export const LibraryForm = ({ properties }: Props) => {
   const {
@@ -50,6 +61,25 @@ export const LibraryForm = ({ properties }: Props) => {
                 <Textarea {...register(name)} label={label} />
                 {errorMessage && <FieldError message={errorMessage} />}
               </Fragment>
+            );
+          }
+
+          if (property.value?.length! > FIELD_SCROLL_THRESHOLD) {
+            return (
+              <SearchableFieldset
+                key={id}
+                label={label}
+                errorMessage={errorMessage}
+                data={property.value!}
+                searchBy="name"
+              >
+                {(data) =>
+                  data.map(({ id, name }) => {
+                    const Element = getElementByType(type);
+                    return <Element key={id} value={name} label={name} />;
+                  })
+                }
+              </SearchableFieldset>
             );
           }
 
