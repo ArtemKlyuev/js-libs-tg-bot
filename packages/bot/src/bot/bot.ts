@@ -40,7 +40,7 @@ export const startBot = async (): Promise<void> => {
       const parsed = JSON.parse(result) as string[];
       const promises = parsed.map((library) => sendLibrary(library));
       await Promise.all(promises);
-    } catch (error) {
+    } catch {
       await sendLibrary(result);
     }
   });
