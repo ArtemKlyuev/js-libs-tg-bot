@@ -1,14 +1,14 @@
 import { FieldError } from '../FieldError';
 
-interface Props {
+export interface FieldsetProps {
   label: string;
   children: React.ReactNode | React.ReactNode[];
   errorMessage?: string | undefined;
 }
 
-export const Fieldset = ({ children, label, errorMessage }: Props) => {
+export const Fieldset = ({ children, label, errorMessage }: FieldsetProps) => {
   return (
-    <fieldset className="max-h-[300px] overflow-y-auto">
+    <fieldset>
       <legend>{label}</legend>
       {errorMessage && <FieldError message={errorMessage} />}
       {children}
