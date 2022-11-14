@@ -12,5 +12,6 @@ export * from './InputLabel';
 export * from './Layout';
 export * from './LibraryCard';
 export * from './Radio';
+export * from './SearchableFieldset';
 export * from './Spinner';
 export * from './Textarea';
