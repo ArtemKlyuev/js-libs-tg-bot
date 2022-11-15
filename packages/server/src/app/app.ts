@@ -29,11 +29,11 @@ export const createApp = (options?: Options) => {
     ignoreTrailingSlash: true,
   });
 
-  const { host, port } = { ...DEFAULT_OPTIONS, ...options };
+  const { port } = { ...DEFAULT_OPTIONS, ...options };
 
   const start = async () => {
     try {
-      await app.listen({ port, host });
+      await app.listen({ port });
     } catch (err) {
       app.log.error(err);
       process.exit(1);
