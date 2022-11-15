@@ -22,8 +22,8 @@ const envs: EnvVaribales[] = [
 const isDev = process.env.NODE_ENV !== 'production';
 
 if (isDev) {
-  const { loadDevEnvFiles } = await import('./loadDevEnvFiles');
-  loadDevEnvFiles();
+  const { loadEnv } = await import('./loadEnv');
+  loadEnv();
 }
 
 export class Config {
