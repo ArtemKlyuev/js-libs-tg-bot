@@ -1,2 +1,2 @@
-export * from './get-properties/types';
+export * from './properties/types';
 export * from './library/types';
