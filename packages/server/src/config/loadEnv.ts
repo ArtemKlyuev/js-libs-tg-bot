@@ -22,15 +22,19 @@ export const loadEnv = <EnvVars extends Record<string, string>>(): EnvVars | nev
     return process.env as EnvVars;
   }
 
-  const env = loader();
+  try {
+    const env = loader();
 
-  if (env.error) {
+    if (env.error) {
+      throw env.error;
+    }
+
+    return env.parsed as EnvVars;
+  } catch (error) {
     console.error(
-      `Can't parse env file for mode ${mode}. Make sure file exist.\Returning process.env`,
+      `[loadEnv]: Can't parse env file for mode ${mode}. Make sure file exist. Returning process.env`,
     );
-    console.error(env.error);
+    console.error(error);
     return process.env as EnvVars;
   }
-
-  return env.parsed as EnvVars;
 };

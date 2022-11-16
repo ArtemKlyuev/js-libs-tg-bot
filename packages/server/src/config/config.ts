@@ -19,16 +19,12 @@ const envs: EnvVaribales[] = [
   'PASSWORD',
 ];
 
-const isDev = process.env.NODE_ENV !== 'production';
-
-if (isDev) {
-  const { loadEnv } = await import('./loadEnv');
-  loadEnv();
-}
+const { loadEnv } = await import('./loadEnv');
+const loadedEnvs = loadEnv();
 
 export class Config {
   static #loadEnvVariable<Env extends EnvVaribales>(variable: Env): NodeJS.ProcessEnv[Env] | never {
-    const env = process.env[variable];
+    const env = loadedEnvs[variable];
 
     if (!env) {
       throw new Error(`Env variable: "${variable}" is not found!`);
