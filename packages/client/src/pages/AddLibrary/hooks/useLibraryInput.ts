@@ -36,14 +36,14 @@ export const useLibraryInput = ({ validationErrorMessage }: Config): UseLibraryI
   const { setLibrary, existOnDb, existOnNPM } = useLibraryStatus();
 
   const { value, setValue } = useDebouncedInput({
-    onSearch: (value) => setLibrary(value.trim()),
+    onSearch: (value) => setLibrary(value.trim().toLowerCase()),
     wait: 300,
   });
 
   const handleChange: HandleChange = (event) => setValue(event.target.value);
 
   const error = constructInputErrorMessage(
-    value.trim(),
+    value.trim().toLowerCase(),
     validationErrorMessage,
     existOnDb,
     existOnNPM,
