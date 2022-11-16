@@ -1,5 +1,6 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import Fuse from 'fuse.js';
-import React, { useMemo, useState } from 'react';
+
 import { Fieldset, FieldsetProps } from '../Fieldset';
 import { Input } from '../Input';
 
@@ -12,6 +13,11 @@ interface Props extends Omit<FieldsetProps, 'children'> {
 export const SearchableFieldset = ({ data, children, searchBy, ...props }: Props) => {
   const [searchableData, setSearchableData] = useState(data);
   const fuse = useMemo(() => new Fuse(data, { keys: [searchBy] }), []);
+
+  useEffect(() => {
+    // TODO: придумать как приводить стейт к изначальному состоянию
+    window.addEventListener('reset', () => setSearchableData(data), { once: true });
+  }, []);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const searchQuery = e.target.value;
