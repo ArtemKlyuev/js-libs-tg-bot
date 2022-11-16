@@ -74,9 +74,16 @@ export const LibraryForm = ({ properties }: Props) => {
                 searchBy="name"
               >
                 {(data) =>
-                  data.map(({ id, name }) => {
+                  data.map((item) => {
                     const Element = getElementByType(type);
-                    return <Element key={id} value={name} label={name} />;
+                    return (
+                      <Element
+                        key={item.id}
+                        {...register(name)}
+                        value={item.name}
+                        label={item.name}
+                      />
+                    );
                   })
                 }
               </SearchableFieldset>
@@ -100,7 +107,7 @@ export const LibraryForm = ({ properties }: Props) => {
           );
         })}
         <div className="sticky bottom-0 grid">
-          <Button type="submit" loading={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
             Добавить
           </Button>
         </div>
