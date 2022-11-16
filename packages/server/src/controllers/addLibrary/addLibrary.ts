@@ -14,7 +14,7 @@ export const addLibrary = async (
   libraryData: LibraryData,
   { dbRepository, github, npmRegistry }: Dependencies,
 ): Promise<AddLibraryResult> => {
-  const npm = await npmRegistry.getPackageInfo(libraryData.name);
+  const npm = await npmRegistry.getPackageInfo(libraryData.name.trim().toLowerCase());
 
   if (npm.isLeft()) {
     // @ts-expect-error Ругается, что `PackageInfo` не соответствует типу `void`, но
@@ -23,7 +23,9 @@ export const addLibrary = async (
   }
 
   const eitherDownloads = (
-    await npmRegistry.getPackageDownloads(libraryData.name, { point: 'last-week' })
+    await npmRegistry.getPackageDownloads(libraryData.name.trim().toLowerCase(), {
+      point: 'last-week',
+    })
   ).mapRight(({ downloads }) => downloads);
 
   const eitherGithubInfo = (
@@ -36,7 +38,7 @@ export const addLibrary = async (
     await eitherFullPackageInfo.asyncMap(async ([githubInfo, npmDownloads]) => {
       const propertiesModels = await propertyToModel(
         {
-          name: libraryData.name,
+          name: libraryData.name.trim().toLowerCase(),
           platform: libraryData.platform,
           repoURL: githubInfo.repoURL,
           status: libraryData.status,
