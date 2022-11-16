@@ -14,15 +14,19 @@ export const SearchableFieldset = ({ data, children, searchBy, ...props }: Props
   const fuse = useMemo(() => new Fuse(data, { keys: [searchBy] }), []);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const searchResult = fuse.search(e.target.value);
+    const searchQuery = e.target.value;
+    const searchResult = fuse.search(searchQuery);
+    const hasSearchResults = Boolean(searchResult.length);
 
-    if (searchResult.length) {
+    if (hasSearchResults || (!hasSearchResults && searchQuery)) {
       const newState = searchResult.map(({ item }) => item);
       setSearchableData(newState);
       return;
     }
 
-    setSearchableData(data);
+    if (!hasSearchResults) {
+      setSearchableData(data);
+    }
   };
 
   return (
