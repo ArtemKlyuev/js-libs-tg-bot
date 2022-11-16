@@ -10,9 +10,9 @@ interface Route extends RequestGenericInterface, ReplyGenericInterface {
   Reply: Reply;
 }
 
-export const getPropertiesRoute: FastifyPluginAsync = async (app) => {
+export const propertiesRoute: FastifyPluginAsync = async (app) => {
   app.get<Route>(
-    '/get-properties',
+    '/properties',
     {
       schema,
       errorHandler(error, request, reply) {
