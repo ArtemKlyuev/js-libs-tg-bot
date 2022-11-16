@@ -71,7 +71,7 @@ export class NotionDatabase implements NotionDb {
         });
 
       if (!result.length) {
-        throw new DatabaseFindByQueryError({ code: 404, query: 'no query', message: '' });
+        throw new DatabaseFindByQueryError({ code: 404, query: query ?? 'query', message: '' });
       }
 
       return right(result);
