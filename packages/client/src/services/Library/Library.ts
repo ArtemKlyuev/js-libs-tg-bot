@@ -27,7 +27,7 @@ export class LibraryService implements Library {
   }
 
   getProperties(): Request<GetPropertiesResponse> {
-    return this.#httpRequest.get<GetPropertiesResponse>('/get-properties');
+    return this.#httpRequest.get<GetPropertiesResponse>('/properties');
   }
 
   add(library: LibraryInfo): Request<LibraryInfo> {
