@@ -1,4 +1,5 @@
 import { Telegraf, Markup } from 'telegraf';
+import { useNewReplies } from 'telegraf/future';
 
 import { Config } from '../config';
 
@@ -8,6 +9,7 @@ export const startBot = async (): Promise<void> => {
   const bot = new Telegraf(Config.env.TELEGRAM_BOT_TOKEN);
 
   bot.use(userPermissionGuard(Config.env.TELEGRAM_VALID_USER_ID));
+  bot.use(useNewReplies());
 
   const addLibraryButton = (id: number) => {
     return Markup.button.webApp(
@@ -25,7 +27,7 @@ export const startBot = async (): Promise<void> => {
 
   bot.start(async (ctx) => {
     const { id } = ctx.update.message.from;
-    await ctx.reply(
+    await ctx.sendMessage(
       'Welcome!',
       Markup.keyboard([[addLibraryButton(id), searchLibraryButton(id)]]).resize(),
     );
@@ -34,7 +36,8 @@ export const startBot = async (): Promise<void> => {
   bot.on('web_app_data', async (ctx) => {
     const result = ctx.update.message.web_app_data.data;
 
-    const sendLibrary = (library: string) => ctx.reply(library, { disable_web_page_preview: true });
+    const sendLibrary = (library: string) =>
+      ctx.sendMessage(library, { disable_web_page_preview: true });
 
     try {
       const parsed = JSON.parse(result) as string[];
@@ -43,7 +46,11 @@ export const startBot = async (): Promise<void> => {
     } catch {
       await sendLibrary(result);
     }
+
+    await ctx.sendMessage('Готово!');
   });
+
+  bot.catch((error) => console.error('BOT ERROR: ', error));
 
   bot.launch();
 
