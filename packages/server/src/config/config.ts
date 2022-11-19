@@ -67,4 +67,6 @@ export class Config {
   }
 
   static readonly env = this.#loadEnvVariables();
+  static readonly isProd: boolean = this.env.NODE_ENV === 'production';
+  static readonly isDev: boolean = !this.isProd;
 }
