@@ -1,4 +1,4 @@
-import { Either, mergeInMany } from '@sweet-monads/either';
+import { Either, left, mergeInMany } from '@sweet-monads/either';
 import { FetchError, PackageNameError } from 'common/services';
 
 import { propertyToModel } from '@utils';
@@ -12,9 +12,10 @@ type AddLibraryResult = Either<Errors | Errors[], void>;
 
 export const addLibrary = async (
   libraryData: LibraryData,
-  { dbRepository, github, npmRegistry }: Dependencies,
+  { bestOfJS, dbRepository, github, npmRegistry }: Dependencies,
 ): Promise<AddLibraryResult> => {
-  const npm = await npmRegistry.getPackageInfo(libraryData.name.trim().toLowerCase());
+  const libraryName = libraryData.name.trim().toLowerCase();
+  const npm = await npmRegistry.getPackageInfo(libraryName);
 
   if (npm.isLeft()) {
     // @ts-expect-error Ругается, что `PackageInfo` не соответствует типу `void`, но
@@ -23,14 +24,34 @@ export const addLibrary = async (
   }
 
   const eitherDownloads = (
-    await npmRegistry.getPackageDownloads(libraryData.name.trim().toLowerCase(), {
+    await npmRegistry.getPackageDownloads(libraryName, {
       point: 'last-week',
     })
   ).mapRight(({ downloads }) => downloads);
 
-  const eitherGithubInfo = (
-    await npm.asyncMap(({ gitRepository }) => getGithubInfo(gitRepository, github))
-  ).join();
+  const awaitableEitherGithubInfo = npm
+    .mapRight(({ gitRepository }) => gitRepository)
+    .asyncMap(async (gitRepository) => {
+      const { owner, name } = gitRepository;
+
+      if (owner && name) {
+        return getGithubInfo({ owner, name }, github);
+      }
+
+      const project = await bestOfJS.findByNPMName(libraryName);
+
+      if (!project) {
+        return left(new Error(`No owner or name. owner: ${owner}, name: ${name}`));
+      }
+
+      const { full_name: githubPath } = project;
+
+      const [repoOwner, repoName] = githubPath.split('/');
+
+      return getGithubInfo({ name: repoName, owner: repoOwner }, github);
+    });
+
+  const eitherGithubInfo = (await awaitableEitherGithubInfo).join();
 
   const eitherFullPackageInfo = mergeInMany([eitherGithubInfo, eitherDownloads]);
 
@@ -38,7 +59,7 @@ export const addLibrary = async (
     await eitherFullPackageInfo.asyncMap(async ([githubInfo, npmDownloads]) => {
       const propertiesModels = await propertyToModel(
         {
-          name: libraryData.name.trim().toLowerCase(),
+          name: libraryName,
           platform: libraryData.platform,
           repoURL: githubInfo.repoURL,
           status: libraryData.status,

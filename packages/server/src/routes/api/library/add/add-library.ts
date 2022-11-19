@@ -28,8 +28,14 @@ export const addLibraryRoute: FastifyPluginAsync = async (app) => {
       const dbRepository = app.diContainer.resolve('notionRepository');
       const github = app.diContainer.resolve('github');
       const npmRegistry = app.diContainer.resolve('npmRegistry');
+      const bestOfJS = app.diContainer.resolve('bestOfJS');
 
-      const result = await addLibrary(request.body, { dbRepository, github, npmRegistry });
+      const result = await addLibrary(request.body, {
+        bestOfJS,
+        dbRepository,
+        github,
+        npmRegistry,
+      });
 
       result
         .mapRight(() => {
