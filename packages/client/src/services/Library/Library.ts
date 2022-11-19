@@ -1,6 +1,8 @@
 import { HttpRequest, Request } from 'common/services';
 import {
   AddLibraryBody,
+  AddLibrarySuccessResponse,
+  AddLibraryErrorResponse,
   CheckExistingSuccessResponse,
   CheckExistingErrorResponse,
   GetPropertiesSuccessReply,
@@ -9,11 +11,12 @@ import {
 } from 'server/types';
 
 export type LibraryInfo = AddLibraryBody;
+export type AddLibraryResponse = AddLibrarySuccessResponse | AddLibraryErrorResponse;
 export type CheckExistingResponse = CheckExistingSuccessResponse | CheckExistingErrorResponse;
 export type GetPropertiesResponse = GetPropertiesSuccessReply | GetPropertiesErrorReply;
 
 export interface Library {
-  add: (library: LibraryInfo) => Request<LibraryInfo>;
+  add: (library: LibraryInfo) => Request<AddLibraryResponse>;
   checkExisting: (name: string) => Request<CheckExistingResponse>;
   getProperties: () => Request<GetPropertiesResponse>;
   search: (query: string) => Request<SearchLibraryReply>;
@@ -30,8 +33,8 @@ export class LibraryService implements Library {
     return this.#httpRequest.get<GetPropertiesResponse>('/properties');
   }
 
-  add(library: LibraryInfo): Request<LibraryInfo> {
-    return this.#httpRequest.put<AddLibraryBody>('/library/add', library);
+  add(library: LibraryInfo): Request<AddLibraryResponse> {
+    return this.#httpRequest.put<LibraryInfo, AddLibraryResponse>('/library/add', library);
   }
 
   checkExisting(name: string): Request<CheckExistingResponse> {
