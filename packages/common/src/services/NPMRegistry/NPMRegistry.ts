@@ -40,6 +40,7 @@ export const NPMRegistryAPI: NPMRegistry = class NPMRegistryAPI {
 
       return right(result);
     } catch (error) {
+      // @ts-expect-error error is unknown
       return left(error);
     }
   }
@@ -53,6 +54,7 @@ export const NPMRegistryAPI: NPMRegistry = class NPMRegistryAPI {
 
       return right(response);
     } catch (error) {
+      // @ts-expect-error error is unknown
       return left(error);
     }
   }
