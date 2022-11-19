@@ -43,7 +43,7 @@ app.setErrorHandler(function (err, req, reply) {
     return reply.code(401).send('unauthorized');
   }
 
-  return reply.send(err);
+  return reply.send(`Unknown error!\n${err}`);
 });
 
 app.start();
