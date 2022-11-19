@@ -1,3 +1,3 @@
-// export * from './Database';
+export * from './BestOfJS';
 export * from './HttpRequest';
 export * from './NPMRegistry';
