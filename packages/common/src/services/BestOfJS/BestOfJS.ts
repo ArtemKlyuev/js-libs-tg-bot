@@ -18,8 +18,7 @@ export class BestOfJSAPI implements BestOfJS {
   async findByNPMName(name: string): Promise<Project | null> {
     try {
       const { projects } = await this.getProjects();
-      // @ts-expect-error it's ok, error is catching
-      return projects.find(({ npm }) => name.toLowerCase() === npm.toLowerCase())!;
+      return projects.find(({ npm }) => name.toLowerCase() === npm?.toLowerCase())! ?? null;
     } catch (error) {
       console.error(`[BestOfJS]: can't find package by name "${name}"`, error);
       return null;
