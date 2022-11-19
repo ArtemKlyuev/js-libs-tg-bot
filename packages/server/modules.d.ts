@@ -1,4 +1,4 @@
-import { NPMRegistry } from 'common/services';
+import { BestOfJS, NPMRegistry } from 'common/services';
 
 import { ParsedEnvVariables } from './src/config';
 import { NotionDb, Github } from './src/services';
@@ -11,6 +11,7 @@ declare module '@fastify/awilix' {
     notionDb: NotionDb;
     notionRepository: DatabaseRepository;
     npmRegistry: NPMRegistry;
+    bestOfJS: BestOfJS;
   }
 }
 

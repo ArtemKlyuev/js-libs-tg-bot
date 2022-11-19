@@ -1,12 +1,12 @@
 import { diContainer } from '@fastify/awilix';
 import { asFunction, asValue, Lifetime } from 'awilix';
-import { NPMRegistryAPI } from 'common/services';
+import { BestOfJSAPI, NPMRegistryAPI, AxiosHttpRequest } from 'common/services';
 
 import { Config } from './config';
 import { NotionDatabase, GithubAPI } from './services';
 import { NotionDbRepository } from './repository';
 
-export const createDIContainer = () => {
+export const createDIContainer = (): void => {
   diContainer.register({
     config: asValue(Config.env),
     github: asFunction(() => GithubAPI).singleton(),
@@ -32,5 +32,6 @@ export const createDIContainer = () => {
       },
     ),
     npmRegistry: asFunction(() => NPMRegistryAPI).singleton(),
+    bestOfJS: asFunction(() => new BestOfJSAPI(new AxiosHttpRequest())).singleton(),
   });
 };
