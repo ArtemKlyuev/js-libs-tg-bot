@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { HttpRequestError } from 'common/services';
 import { GetPropertiesSuccessReply, GetPropertiesErrorReply } from 'server/types';
