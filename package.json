@@ -2,38 +2,36 @@
   "name": "js-libs-tg-bot",
   "version": "1.0.0",
   "license": "MIT",
+  "private": "true",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "typecheck": "tsc --noEmit --pretty",
-    "dev": "nodemon src/bot/index.ts",
-    "dev:debug": "cross-env DEBUG='telegraf:*' yarn dev",
-    "start": "node build/index.js",
-    "build": "ts-node esbuild.config.ts --swc"
-  },
-  "dependencies": {
-    "@notionhq/client": "1.0.4",
-    "@octokit/rest": "18.12.0",
-    "@sweet-monads/either": "3.0.1",
-    "lodash": "4.17.21",
-    "query-registry": "2.5.0",
-    "telegraf": "4.8.3"
+    "postinstall": "patch-package",
+    "proxy": "docker-compose up",
+    "add:root": "yarn add -W -D -E",
+    "dev:server:client": "yarn lerna run dev --scope='{server,client}' --parallel",
+    "package:bot": "yarn workspace bot",
+    "package:client": "yarn workspace client",
+    "package:common": "yarn workspace common",
+    "package:server": "yarn workspace server"
   },
   "devDependencies": {
-    "@swc/core": "1.2.203",
-    "@types/lodash": "4.14.182",
-    "@types/node": "16.11.41",
-    "cross-env": "7.0.3",
-    "dotenv": "16.0.1",
-    "esbuild": "0.14.43",
-    "eslint": "8.17.0",
+    "eslint": "8.27.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.26.0",
     "husky": "8.0.1",
-    "lint-staged": "13.0.1",
-    "nodemon": "2.0.16",
-    "prettier": "2.7.0",
-    "ts-node": "10.8.1",
-    "tsconfig-paths": "4.0.0",
-    "type-fest": "2.13.1",
-    "typescript": "4.7.3"
+    "lerna": "6.0.3",
+    "lint-staged": "13.0.3",
+    "nodemon": "2.0.20",
+    "patch-package": "6.5.0",
+    "postinstall-postinstall": "2.1.0",
+    "prettier": "2.7.1",
+    "ts-node": "10.9.1",
+    "type-fest": "3.2.0",
+    "typescript": "4.9.3"
+  },
+  "dependencies": {
+    "fuse.js": "6.6.2"
   }
 }

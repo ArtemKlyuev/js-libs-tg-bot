@@ -1,0 +1,15 @@
+{
+  "include": ["vite.config.ts"],
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@components": ["./src/components/index.ts"],
+      "@hooks": ["./src/hooks/index.ts"],
+      "@pages": ["./src/pages/index.ts"],
+      "@pages/*": ["./src/pages/*"]
+    }
+  }
+}

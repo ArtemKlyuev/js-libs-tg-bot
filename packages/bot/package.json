@@ -1,0 +1,16 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": "true",
+  "scripts": {
+    "typecheck": "tsc --noEmit --pretty",
+    "dev": "nodemon src/index.ts",
+    "dev:debug": "cross-env DEBUG='telegraf:*' yarn dev",
+    "start": "node build/index.js",
+    "build": "ts-node scripts/build.ts --swc"
+  },
+  "dependencies": {
+    "telegraf": "4.11.0"
+  }
+}
