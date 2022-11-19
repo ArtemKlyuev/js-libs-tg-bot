@@ -3,11 +3,16 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { GetPropertiesSuccessReply } from 'server/types';
+import {
+  GetPropertiesSuccessReply,
+  AddLibrarySuccessResponse,
+  AddLibraryErrorResponse,
+} from 'server/types';
 
 import { LibraryInfo } from '@services';
 import { useServices } from '@hooks';
 import { Checkbox, Input, Radio, Textarea } from '@components';
+import { HttpRequestError } from 'common/services';
 
 interface ValidationOptions {
   required: boolean;
@@ -62,8 +67,23 @@ export const useAddLibraryForm = (properties: GetPropertiesSuccessReply['propert
 
   const { libraryService } = useServices();
 
-  const { mutate: send, isLoading: isSubmitting } = useMutation({
-    mutationFn: (library: LibraryInfo) => libraryService.add(library).response,
+  const { mutate: send, isLoading: isSubmitting } = useMutation<
+    AddLibrarySuccessResponse,
+    HttpRequestError<AddLibraryErrorResponse>,
+    LibraryInfo
+  >({
+    mutationFn: async (library) => {
+      const { data } = await libraryService.add(library).response;
+      return data as AddLibrarySuccessResponse;
+    },
+    onError: (error) => {
+      const { code, message, responseData } = error;
+      const errorMessage = `Code: ${code}\nMessage: ${message}\nServer error message: ${
+        responseData!.error
+      }`;
+      // TODO: убрать `alert`, сделать через UI(notifier или модалка)
+      alert(errorMessage);
+    },
   });
 
   const onSubmit = handleSubmit((data) => {
