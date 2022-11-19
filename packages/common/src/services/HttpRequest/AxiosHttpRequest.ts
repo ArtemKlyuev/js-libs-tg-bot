@@ -68,11 +68,15 @@ export class AxiosHttpRequest implements HttpRequest {
     return this.#createRequest(response, controller.abort);
   }
 
-  post<Data>(url: string, data: Data, options?: POSTRequestOptions | undefined): Request<Data> {
+  post<Data, ResponseData = Data>(
+    url: string,
+    data: Data,
+    options?: POSTRequestOptions | undefined,
+  ): Request<ResponseData> {
     const controller = new AbortController();
 
     const response = this.#axios
-      .post<Data>(url, data, {
+      .post<ResponseData>(url, data, {
         ...options,
         signal: controller.signal,
       })
@@ -81,11 +85,15 @@ export class AxiosHttpRequest implements HttpRequest {
     return this.#createRequest(response, controller.abort);
   }
 
-  put<Data>(url: string, data: Data, options?: POSTRequestOptions | undefined): Request<Data> {
+  put<Data, ResponseData = Data>(
+    url: string,
+    data: Data,
+    options?: POSTRequestOptions | undefined,
+  ): Request<ResponseData> {
     const controller = new AbortController();
 
     const response = this.#axios
-      .put<Data>(url, data, {
+      .put<ResponseData>(url, data, {
         ...options,
         signal: controller.signal,
       })

@@ -33,6 +33,14 @@ export interface HttpRequestError<Data = any> extends ErrorWithCode {
 
 export interface HttpRequest {
   get<Data>(url: string, options?: GETRequestOptions | undefined): Request<Data>;
-  post<Data>(url: string, data: Data, options?: POSTRequestOptions | undefined): Request<Data>;
-  put<Data>(url: string, data: Data, options?: POSTRequestOptions | undefined): Request<Data>;
+  post<Data, ResponseData = Data>(
+    url: string,
+    data: Data,
+    options?: POSTRequestOptions | undefined,
+  ): Request<ResponseData>;
+  put<Data, ResponseData = Data>(
+    url: string,
+    data: Data,
+    options?: POSTRequestOptions | undefined,
+  ): Request<ResponseData>;
 }
