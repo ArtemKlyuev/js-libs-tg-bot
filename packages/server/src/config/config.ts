@@ -1,3 +1,5 @@
+import { loadEnv } from './loadEnv';
+
 if (!process.env.NODE_ENV) {
   throw new Error('process.env.NODE_ENV is not defined');
 }
@@ -19,7 +21,6 @@ const envs: EnvVaribales[] = [
   'PASSWORD',
 ];
 
-const { loadEnv } = await import('./loadEnv');
 const loadedEnvs = loadEnv();
 
 export class Config {
