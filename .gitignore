@@ -1,8 +1,11 @@
 dist
 build
 node_modules
+.env
+.env.production
 .env.local
 .env.*.local
+.env*
 *.log
 .settings/
 
