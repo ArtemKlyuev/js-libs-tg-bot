@@ -15,8 +15,8 @@
     "postinstall": "patch-package",
     "typecheck": "tsc --noEmit --pretty",
     "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
-    "start": "node build/index.js",
-    "build": "cross-env NODE_ENV=production ts-node scripts/build.ts --swc"
+    "start": "cross-env NODE_ENV=production node build/index.js",
+    "build": "rm -rf build && ts-node --esm scripts/build.ts"
   },
   "dependencies": {
     "@fastify/auth": "4.1.0",
