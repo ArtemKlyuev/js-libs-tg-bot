@@ -4,13 +4,18 @@ import Fuse from 'fuse.js';
 import { Fieldset, FieldsetProps } from '../Fieldset';
 import { Input } from '../Input';
 
-interface Props extends Omit<FieldsetProps, 'children'> {
-  data: any[];
-  searchBy: string;
-  children: (data: any[]) => React.ReactNode;
+interface Props<Data extends {}> extends Omit<FieldsetProps, 'children'> {
+  data: Data[];
+  searchBy: Extract<keyof Data, string>;
+  children: (data: Data[]) => React.ReactElement[];
 }
 
-export const SearchableFieldset = ({ data, children, searchBy, ...props }: Props) => {
+export const SearchableFieldset = <Data extends {}>({
+  data,
+  children,
+  searchBy,
+  ...props
+}: Props<Data>) => {
   const [searchableData, setSearchableData] = useState(data);
   const fuse = useMemo(() => new Fuse(data, { keys: [searchBy] }), []);
 
