@@ -1,5 +1,6 @@
 import { Telegraf, Markup } from 'telegraf';
 import { useNewReplies } from 'telegraf/future';
+import { message } from 'telegraf/filters';
 
 import { Config } from '../config';
 
@@ -33,7 +34,7 @@ export const startBot = async (): Promise<void> => {
     );
   });
 
-  bot.on('web_app_data', async (ctx) => {
+  bot.on(message('web_app_data'), async (ctx) => {
     const result = ctx.update.message.web_app_data.data;
 
     const sendLibrary = (library: string) =>
