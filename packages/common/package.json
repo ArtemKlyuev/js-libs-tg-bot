@@ -5,14 +5,13 @@
   "private": "true",
   "type": "module",
   "exports": {
-    "./package.json": "./package.json",
     "./services": {
-      "import": "./src/services/index.ts",
-      "types": "./src/services/index.ts"
+      "types": "./src/services/index.ts",
+      "import": "./src/services/index.ts"
     },
     "./utils": {
-      "import": "./src/utils/index.ts",
-      "types": "./src/utils/index.ts"
+      "types": "./src/utils/index.ts",
+      "import": "./src/utils/index.ts"
     }
   },
   "typesVersions": {
