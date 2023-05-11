@@ -5488,6 +5488,13 @@ node-fetch@^2.6.1, node-fetch@^2.6.7:
   dependencies:
     whatwg-url "^5.0.0"
 
+node-fetch@^2.6.8:
+  version "2.6.11"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.11.tgz#cde7fc71deef3131ef80a738919f999e6edfff25"
+  integrity sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==
+  dependencies:
+    whatwg-url "^5.0.0"
+
 node-gyp-build@^4.3.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.5.0.tgz#7a64eefa0b21112f89f58379da128ac177f20e40"
@@ -7304,19 +7311,19 @@ tar@^6.1.0, tar@^6.1.11, tar@^6.1.2:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
-telegraf@4.11.0:
-  version "4.11.0"
-  resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-4.11.0.tgz#a28066e1b31eb727181b093d3374a773fb1a15ed"
-  integrity sha512-zsX5mK880Bf7/I9R+Q3oAHaQLqfGKvAb/9XRiRV4FhcnWdWFs3V+Fn+KDo+q0COrmvcjFanXAc7I47w2OFWpTQ==
+telegraf@4.12.2:
+  version "4.12.2"
+  resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-4.12.2.tgz#1cf4f38c275e04416f1282f3581833994870f0bc"
+  integrity sha512-PgwqI4wD86cMqVfFtEM9JkGGnMHgvgLJbReZMmwW4z35QeOi4DvbdItONld4bPnYn3A1jcO0SRKs0BXmR+x+Ew==
   dependencies:
     abort-controller "^3.0.0"
     debug "^4.3.4"
     mri "^1.2.0"
-    node-fetch "^2.6.7"
+    node-fetch "^2.6.8"
     p-timeout "^4.1.0"
     safe-compare "^1.1.4"
     sandwich-stream "^2.0.2"
-    typegram "^4.1.0"
+    typegram "^4.3.0"
 
 temp-dir@^1.0.0:
   version "1.0.0"
@@ -7544,10 +7551,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
-typegram@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/typegram/-/typegram-4.1.0.tgz#fb1c8f59d387c5b4966be9aac745aa9fcedc0a2d"
-  integrity sha512-OejXXNRh3bb6TQKbUM0k1p1wnEYCrZd66TNLeZeV2S6s4XWkCmVHONXqBTPtWpaq+IUxSyQwKJ1XXyN17Lr0+w==
+typegram@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/typegram/-/typegram-4.3.0.tgz#690ec1287f771608070e149c92de4fca42e54db0"
+  integrity sha512-pS4STyOZoJ++Mwa9GPMTNjOwEzMkxFfFt1By6IbMOJfheP0utMP/H1ga6J9R4DTjAYBr0UDn4eQg++LpWBvcAg==
 
 typescript@4.9.3:
   version "4.9.3"
