@@ -29,7 +29,7 @@
     "lerna": "6.0.3",
     "lint-staged": "13.0.3",
     "nodemon": "2.0.22",
-    "patch-package": "6.5.0",
+    "patch-package": "7.0.0",
     "postinstall-postinstall": "2.1.0",
     "prettier": "2.8.8",
     "tsx": "3.12.7",
