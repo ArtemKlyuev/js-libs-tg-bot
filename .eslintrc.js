@@ -1,5 +1,5 @@
 /** @type {import('eslint').Linter.Config} */
-const config = {
+module.exports = {
   extends: ['airbnb-base'],
   root: true,
   env: {
@@ -21,5 +21,3 @@ const config = {
     semi: ['error', 'always'],
   },
 };
-
-export default config;
