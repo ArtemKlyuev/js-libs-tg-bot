@@ -33,8 +33,5 @@
       "@controllers": ["./src/controllers/index.ts"],
       "@utils": ["./src/utils/index.ts"]
     }
-  },
-  "ts-node": {
-    "swc": true
   }
 }
