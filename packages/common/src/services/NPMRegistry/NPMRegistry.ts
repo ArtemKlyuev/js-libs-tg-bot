@@ -11,19 +11,11 @@ import {
 
 export const NPMRegistryAPI: NPMRegistry = class NPMRegistryAPI {
   static #getGithubOwner(repoURL?: string): string | null {
-    if (!repoURL) {
-      return null;
-    }
-
-    return repoURL.split('/').at(-2) ?? null;
+    return repoURL?.split('/').at(-2) ?? null;
   }
 
   static #getGithubRepoName(repoURL?: string): string | null {
-    if (!repoURL) {
-      return null;
-    }
-
-    return repoURL.split('/').at(-1) ?? null;
+    return repoURL?.split('/').at(-1) ?? null;
   }
 
   static async getPackageInfo(name: string): Promise<PackageInfoResult> {
@@ -40,7 +32,6 @@ export const NPMRegistryAPI: NPMRegistry = class NPMRegistryAPI {
 
       return right(result);
     } catch (error) {
-      // @ts-expect-error error is unknown
       return left(error);
     }
   }
@@ -54,7 +45,6 @@ export const NPMRegistryAPI: NPMRegistry = class NPMRegistryAPI {
 
       return right(response);
     } catch (error) {
-      // @ts-expect-error error is unknown
       return left(error);
     }
   }
