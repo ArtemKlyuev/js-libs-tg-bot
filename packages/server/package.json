@@ -23,7 +23,7 @@
     "@fastify/awilix": "3.0.2",
     "@fastify/basic-auth": "5.0.0",
     "@fastify/cors": "8.2.1",
-    "@sweet-monads/either": "3.1.0",
+    "@sweet-monads/either": "3.2.0",
     "awilix": "8.0.1",
     "common": "1.0.0",
     "fastify": "4.17.0",

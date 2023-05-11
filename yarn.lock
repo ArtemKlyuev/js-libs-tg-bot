@@ -1745,17 +1745,17 @@
     "@swc/core-win32-ia32-msvc" "1.3.16"
     "@swc/core-win32-x64-msvc" "1.3.16"
 
-"@sweet-monads/either@3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@sweet-monads/either/-/either-3.1.0.tgz#802667779112300329564e201e2222102085dc02"
-  integrity sha512-GiKUqzwj2602FCJo+sFMYyuo8OS1rmknSLRSJmjvnKqkyo+OXEqAhw9tAASH/SvCC7OC7IEEUvarocWMuB9pdg==
+"@sweet-monads/either@3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@sweet-monads/either/-/either-3.2.0.tgz#4cea089a34b60b90d6df76b2bdb584da18c9076a"
+  integrity sha512-n+nR0b60GRTKb+D76qhTf4NEBXU9zfpigYYEtKtSYbV+5+i5gxr9jFd64pYkY2O7hVsb/G7nspbAeFni/i1ltA==
   dependencies:
-    "@sweet-monads/interfaces" "^3.1.0"
+    "@sweet-monads/interfaces" "^3.2.0"
 
-"@sweet-monads/interfaces@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@sweet-monads/interfaces/-/interfaces-3.1.0.tgz#49cdd0a697ad025ce05201b0eb495d86a007ed51"
-  integrity sha512-/65uh95U8yWmnVQVQWPh6v49vTDomXYttDJot86JOpWjP2gpStnPX02uTH/WMla0vfGb5KP7mFZMKUvom/QqkA==
+"@sweet-monads/interfaces@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@sweet-monads/interfaces/-/interfaces-3.2.0.tgz#4c772afb1e27e2f9147982cd00f3633add3a3be9"
+  integrity sha512-Bw74qfzTqwaSJO0G+F2J5oFG1MVeiZ5LlEQGmPsXeJPuZ4r1wG4qCO3uACK4HF39JVM0SI+p812OMAdC9yDtYQ==
 
 "@tanstack/query-core@4.15.1":
   version "4.15.1"
