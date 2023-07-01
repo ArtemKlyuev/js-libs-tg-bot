@@ -2486,15 +2486,7 @@ awilix-manager@^1.0.1:
   dependencies:
     awilix "^8.0.1"
 
-awilix@7.0.3:
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/awilix/-/awilix-7.0.3.tgz#5afe8f7acb7cbf2ada5a6221dbdd3f882c77789c"
-  integrity sha512-4Nmjyh9qloDwXfDK0DBuWd8WyFApyknoaKbE3leQflGLgNfNsBHy2/VYrlyy/mzMobjJ3J8XtNpbjzG3KRkIFQ==
-  dependencies:
-    camel-case "^4.1.2"
-    fast-glob "^3.2.11"
-
-awilix@^8.0.1:
+awilix@8.0.1, awilix@^8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/awilix/-/awilix-8.0.1.tgz#4f4704038cc5df3f8f2b9254031af79d4d3708bb"
   integrity sha512-zDSp4R204scvQIDb2GMoWigzXemn0+3AKKIAt543T9v2h7lmoypvkmcx1W/Jet/nm27R1N1AsqrsYVviAR9KrA==
