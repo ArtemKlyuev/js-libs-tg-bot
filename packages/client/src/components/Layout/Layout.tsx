@@ -1,6 +1,6 @@
-import { useDocumentTitle } from '@hooks';
 import { Suspense } from 'react';
 
+import { useDocumentTitle } from '@hooks';
 import { Spinner } from '@components';
 
 interface Props {
