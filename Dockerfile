@@ -1,4 +1,4 @@
-FROM node:16.15.1-alpine3.16 as builder
+FROM node:18.16.1-slim as builder
 
 ARG NODE_ENV
 ARG NOTION_TOKEN
@@ -16,7 +16,7 @@ COPY ./ ./
 
 RUN yarn build
 
-FROM node:16.15.1-alpine3.16 as runner
+FROM node:18.16.1-slim as runner
 
 WORKDIR /app
 
