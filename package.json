@@ -17,9 +17,9 @@
     "package:server": "yarn workspace server"
   },
   "devDependencies": {
-    "eslint": "8.27.0",
+    "eslint": "8.44.0",
     "eslint-config-airbnb-base": "15.0.0",
-    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-import": "2.27.5",
     "husky": "8.0.3",
     "lerna": "6.0.3",
     "lint-staged": "13.2.3",
