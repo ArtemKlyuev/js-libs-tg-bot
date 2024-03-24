@@ -1,0 +1,12 @@
+diff --git a/node_modules/query-registry/package.json b/node_modules/query-registry/package.json
+index 7c2f10e..671ec19 100644
+--- a/node_modules/query-registry/package.json
++++ b/node_modules/query-registry/package.json
+@@ -4,6 +4,7 @@
+     "version": "2.6.0",
+     "author": "Edoardo Scibona (velut)",
+     "license": "MIT",
++    "type": "module",
+     "source": "./src/index.ts",
+     "main": "./dist/index.js",
+     "module": "./dist/query-registry.esm.js",

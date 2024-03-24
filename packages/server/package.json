@@ -23,9 +23,11 @@
     "@fastify/awilix": "3.1.0",
     "@fastify/basic-auth": "5.0.0",
     "@fastify/cors": "8.3.0",
+    "@notionhq/client": "1.0.4",
+    "@octokit/rest": "18.12.0",
     "@sweet-monads/either": "3.1.0",
     "awilix": "8.0.1",
-    "common": "1.0.0",
+    "common": "workspace:*",
     "fastify": "4.19.0",
     "zod": "3.21.4",
     "zod-to-json-schema": "3.21.3"

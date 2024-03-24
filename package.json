@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "private": "true",
+  "packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
   "workspaces": [
     "packages/*"
   ],
@@ -10,14 +11,15 @@
     "postinstall": "patch-package",
     "proxy": "docker-compose up",
     "add:root": "yarn add -W -D -E",
-    "dev:server:client": "yarn lerna run dev --scope='{server,client}' --parallel",
-    "package:bot": "yarn workspace bot",
-    "package:client": "yarn workspace client",
-    "package:common": "yarn workspace common",
-    "package:server": "yarn workspace server"
+    "dev:server:client": "pnpm lerna run dev --scope='{server,client}' --parallel",
+    "pkg:bot": "pnpm --filter bot",
+    "pkg:client": "pnpm --filter client",
+    "pkg:common": "pnpm --filter common",
+    "pkg:server": "pnpm --filter server",
+    "update:interactive": "pnpm update --interactive --latest"
   },
   "devDependencies": {
-    "@types/node": "18.16.19",
+    "@types/node": "20.11.30",
     "cross-env": "7.0.3",
     "dotenv": "16.3.1",
     "esbuild": "0.18.11",
