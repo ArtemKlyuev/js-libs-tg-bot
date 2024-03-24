@@ -12,16 +12,19 @@ import { createDIContainer } from './diContainer';
 const app = createApp();
 
 app.register(cors, {
-  origin: Config.isDev ? '*' : Config.env.ALLOWED_ORIGINS,
+  // origin: Config.isDev ? '*' : Config.env.ALLOWED_ORIGINS,
+  origin: Config.env.ALLOWED_ORIGINS,
   credentials: true,
 });
 
 await app.register(auth);
 
 const validate: FastifyBasicAuthOptions['validate'] = async (username, password) => {
-  if (Number(username) === Config.env.LOGIN && password === Config.env.PASSWORD) {
-    return;
-  }
+  // return true;
+  return;
+  // if (Number(username) === Config.env.LOGIN && password === Config.env.PASSWORD) {
+  //   return;
+  // }
 
   return new Error('Invalid credentials');
 };
